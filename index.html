@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <script src="showdown.js"></script>
+    <script src="jquery-1.11.3.min.js"></script>
+    <script>
+      var converter = new showdown.Converter();
+
+      function update(){
+        var srcText = $('#src').val();
+        var html = converter.makeHtml(srcText);
+        document.querySelector("#target").innerHTML = html;
+      }
+
+      $(document).ready(function() {
+
+        $("#src").on('input', function() {
+          update()
+        });
+
+        $("#btnInsertList").on('click', function() {
+            var caretPos = document.getElementById("src").selectionStart;
+            var textAreaTxt = jQuery("#src").val();
+            var txtToAdd = "\n\
+*   Red\n\
+*   Green\n\
+*   Blue\n\
+";
+            $("#src").val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
+            update();
+        });
+
+        update();
+      });
+
+      function htmlUnescape(value){
+          return String(value)
+              .replace(/&quot;/g, '"')
+              .replace(/&#39;/g, "'")
+              .replace(/&#x2f;/g, "/")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&amp;/g, '&');
+      }
+    </script>
+  </head>
+  <body>
+
+    <div style="width: 100%;">
+      <div style="float: left; width: 10%;">
+        <button id="btnInsertList">Insert List</button>
+      </div>
+      <div style="float: left; width: 35%;" >
+<textarea id="src" rows="20" style="width:80%">#Markdown!
+
+---
+
+Sample page
+
+---
+
+<img src="http://i.imgur.com/Rc3Oilf.gif"/>
+
+
+*   Red
+*   Green
+*   Blue
+</textarea>
+      </div>
+      <div style="float: left; width: 55%;">
+        <div id="target" style="white-space: pre;">output</div>
+      </div>
+      <br style="clear: left;" />
+    </div>
+  </body>
+</html>
