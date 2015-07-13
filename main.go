@@ -39,6 +39,7 @@ func init() {
 
 func main() {
 	router.HandleFunc("/", indexPageHandler).Methods("GET")
+	router.HandleFunc("/post.html", postHandler).Methods("GET")
 
 	wd, _ := os.Getwd()
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/assets"))))

@@ -1,80 +1,16 @@
 <html>
   <head>
-    <script src="assets/js/showdown.js"></script>
-    <script src="assets/js/jquery-1.11.3.min.js"></script>
-    <script>
-      var converter = new showdown.Converter();
-
-      function update(){
-        var srcText = $('#src').val();
-        var html = converter.makeHtml(srcText);
-        document.querySelector("#target").innerHTML = html;
-      }
-
-      $(document).ready(function() {
-
-        $("#src").on('input', function() {
-          update()
-        });
-
-        $("#btnInsertList").on('click', function() {
-            var caretPos = document.getElementById("src").selectionStart;
-            var textAreaTxt = jQuery("#src").val();
-            var txtToAdd = "\n\
-* Red\n\
-* Green\n\
-* Blue\n\
-";
-            $("#src").val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
-            update();
-        });
-
-        $("#btnSave").on('click', function() {
-          alert($('#src').val())
-        });
-
-        update();
-      });
-
-      function htmlUnescape(value){
-          return String(value)
-              .replace(/&quot;/g, '"')
-              .replace(/&#39;/g, "'")
-              .replace(/&#x2f;/g, "/")
-              .replace(/&lt;/g, '<')
-              .replace(/&gt;/g, '>')
-              .replace(/&amp;/g, '&');
-      }
-    </script>
   </head>
   <body>
+    posts
+    <ul>
+      <li>01/07/2015 - Lorem ipsum dolor sit amet</li>
+      <li>21/06/2015 - In detracto iudicabit dissentiunt sed</li>
+      <li>11/06/2015 - An oratio recusabo nam</li>
+      <li>16/05/2015 - pri euripidis conceptam consectetuer te</li>
+      <li>02/04/2015 - Te nostrum maluisset appellantur sea</li>
+    </ul>
 
-    <div style="width: 100%;">
-      <div style="float: left; width: 10%;">
-        <button id="btnInsertList">Insert List</button>
-        <button id="btnSave">Save</button>
-      </div>
-      <div style="float: left; width: 35%;" >
-<textarea id="src" rows="20" style="width:80%">#Markdown Live Edit!
-
----
-
-Sample page
-
----
-
-<img src="http://i.imgur.com/Rc3Oilf.gif"/>
-
-
-*   Red
-*   Green
-*   Blue
-</textarea>
-      </div>
-      <div style="float: left; width: 55%;">
-        <div id="target" style="white-space: pre;">output</div>
-      </div>
-      <br style="clear: left;" />
-    </div>
+    <a href="post.html">New Post</a>
   </body>
 </html>
