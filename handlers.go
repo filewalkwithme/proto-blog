@@ -8,15 +8,16 @@ import (
 	"time"
 )
 
+type Post struct {
+	ID   int
+	Post string
+	Date time.Time
+}
+
 var indexPage string
 
 // index page
 func indexPageHandler(response http.ResponseWriter, request *http.Request) {
-	type Post struct {
-		ID   int
-		Post string
-		Date time.Time
-	}
 	var posts []Post
 
 	rows, err := DB.Query("select id, post, date from post")
@@ -48,8 +49,27 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 
 // new post page
 func postHandler(response http.ResponseWriter, request *http.Request) {
-	type Page struct{}
-	var page = Page{}
+	v := request.URL.Query()
+	pID := v.Get("id")
+
+	stmt, err := DB.Prepare("select id, post, date from post where id = ?")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+	var id int
+	var post string
+	var date time.Time
+	err = stmt.QueryRow(pID).Scan(&id, &post, &date)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	type Page struct {
+		ID   int
+		Post string
+	}
+	var page = Page{ID: id, Post: post}
 
 	bufIndexPage, _ := ioutil.ReadFile("pages/post.html")
 	indexPage = string(bufIndexPage)

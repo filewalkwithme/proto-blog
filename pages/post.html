@@ -8,7 +8,7 @@
       function update(){
         var srcText = $('#src').val();
         var html = converter.makeHtml(srcText);
-        document.querySelector("#target").innerHTML = html;
+        $("#target").html(html);
       }
 
       $(document).ready(function() {
@@ -55,21 +55,7 @@
         <button id="btnSave">Save</button>
       </div>
       <div style="float: left; width: 35%;" >
-<textarea id="src" rows="20" style="width:80%">#Markdown Live Edit!
-
----
-
-Sample page
-
----
-
-<img src="http://i.imgur.com/Rc3Oilf.gif"/>
-
-
-*   Red
-*   Green
-*   Blue
-</textarea>
+<textarea id="src" rows="20" style="width:80%">{{.Post}}</textarea>
       </div>
       <div style="float: left; width: 55%;">
         <div id="target" style="white-space: pre;">output</div>

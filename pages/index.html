@@ -7,7 +7,7 @@
 
     <ul>
       {{range .Posts}}
-      <li>{{.Date}} - {{.Post}}</li>
+      <li><a href="post.html?id={{.ID}}">{{.Date}} - {{.Post}}</a></li>
       {{end}}
     </ul>
 
