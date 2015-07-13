@@ -12,7 +12,9 @@ import (
 )
 
 var router = mux.NewRouter()
-var db *sql.DB
+
+//DB is the global DB object
+var DB *sql.DB
 
 func init() {
 	_, errCheckExists := os.Stat("./blog.db")
@@ -21,7 +23,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	DB = db
 
 	if os.IsNotExist(errCheckExists) {
 		fmt.Printf("File blog.db not exists. \nCreating initial database.\n")

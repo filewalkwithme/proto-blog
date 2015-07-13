@@ -3,12 +3,12 @@
   </head>
   <body>
     posts
+
+
     <ul>
-      <li>01/07/2015 - Lorem ipsum dolor sit amet</li>
-      <li>21/06/2015 - In detracto iudicabit dissentiunt sed</li>
-      <li>11/06/2015 - An oratio recusabo nam</li>
-      <li>16/05/2015 - pri euripidis conceptam consectetuer te</li>
-      <li>02/04/2015 - Te nostrum maluisset appellantur sea</li>
+      {{range .Posts}}
+      <li>{{.Date}} - {{.Post}}</li>
+      {{end}}
     </ul>
 
     <a href="post.html">New Post</a>
