@@ -51,6 +51,7 @@
           <button id="btnInsertList">Insert List</button>
             <input type="hidden" name="id" value="{{.ID}}"/>
             <input type="submit" id="btnSave" value="Save"/>
+            <a href="/delete?id={{.ID}}">Delete</a>
         </div>
         <div style="float: left; width: 35%;" >
           <textarea name="post" id="src" rows="20" style="width:80%">{{.Post}}</textarea>

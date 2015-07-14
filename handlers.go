@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+//Post represents the post entry
 type Post struct {
 	ID   int
 	Post string
@@ -124,4 +125,27 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 		tx.Commit()
 		http.Redirect(response, request, request.Referer(), 302)
 	}
+}
+
+// new post page
+func deleteHandler(response http.ResponseWriter, request *http.Request) {
+	v := request.URL.Query()
+	pID := v.Get("id")
+
+	tx, err := DB.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+	stmt, err := tx.Prepare("delete from post where id=?")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(pID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tx.Commit()
+	http.Redirect(response, request, "/", 302)
+
 }
