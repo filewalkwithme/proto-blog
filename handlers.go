@@ -14,7 +14,7 @@ type Post struct {
 	ID      int
 	Title   string
 	Content string
-	Date    time.Time
+	Date    string
 }
 
 var indexPage string
@@ -34,7 +34,7 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 		var title string
 		var date time.Time
 		rows.Scan(&id, &content, &title, &date)
-		posts = append(posts, Post{ID: id, Title: title, Content: content, Date: date})
+		posts = append(posts, Post{ID: id, Title: title, Content: content, Date: date.Format("2006-01-02")})
 	}
 	rows.Close()
 
