@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <script src="assets/js/showdown.js"></script>
+    <script src="assets/js/jquery-1.11.3.min.js"></script>
+    <script>
+      var converter = new showdown.Converter();
+
+      function update(){
+        var srcText = $('#src').val();
+        var html = converter.makeHtml(srcText);
+        $("#target").html(html);
+      }
+
+      $(document).ready(function() {
+
+        $("#src").on('input', function() {
+          update()
+        });
+
+        $("#btnInsertList").on('click', function() {
+            var caretPos = document.getElementById("src").selectionStart;
+            var textAreaTxt = jQuery("#src").val();
+            var txtToAdd = "\n\
+* Red\n\
+* Green\n\
+* Blue\n\
+";
+            $("#src").val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
+            update();
+        });
+
+        update();
+      });
+
+      function htmlUnescape(value){
+          return String(value)
+              .replace(/&quot;/g, '"')
+              .replace(/&#39;/g, "'")
+              .replace(/&#x2f;/g, "/")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&amp;/g, '&');
+      }
+    </script>
+  </head>
+  <body>
+
+    <form method="POST" action="save">
+      <div style="width: 100%;">
+        <div style="float: left; width: 10%;">
+          <button id="btnInsertList">Insert List</button>
+            <input type="hidden" name="id" value="{{.ID}}"/>
+            <input type="submit" id="btnSave" value="Save"/>
+            <a href="/">Home</a>
+        </div>
+        <div style="float: left; width: 35%;" >
+          <input type="text" name="title" value="{{.Title}}"/>
+          <textarea name="content" id="src" rows="20" style="width:80%">{{.Content}}</textarea>
+        </div>
+        <div style="float: left; width: 55%;">
+          <div id="target" style="white-space: pre;">output</div>
+        </div>
+        <br style="clear: left;" />
+      </div>
+    </form>
+  </body>
+</html>

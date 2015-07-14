@@ -7,10 +7,10 @@
 
     <ul>
       {{range .Posts}}
-      <li><a href="post.html?id={{.ID}}">{{.Date}} - {{.Post}}</a></li>
+      <li><a href="delete?id={{.ID}}">Delete</a> <a href="edit.html?id={{.ID}}">Edit</a> <a href="post.html?id={{.ID}}">{{.Title}}({{.Date}})</a></li>
       {{end}}
     </ul>
 
-    <a href="post.html">New Post</a>
+    <a href="edit.html">New Post</a>
   </body>
 </html>

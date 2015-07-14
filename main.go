@@ -28,7 +28,7 @@ func init() {
 	if os.IsNotExist(errCheckExists) {
 		fmt.Printf("File blog.db not exists. \nCreating initial database.\n")
 
-		sqlCreateDB := `create table post (id integer not null primary key, post text, date datetime);`
+		sqlCreateDB := `create table posts (id integer not null primary key, title text, content text, date datetime);`
 
 		_, err = db.Exec(sqlCreateDB)
 		if err != nil {
@@ -42,6 +42,7 @@ func init() {
 func main() {
 	router.HandleFunc("/", indexPageHandler).Methods("GET")
 	router.HandleFunc("/post.html", postHandler).Methods("GET")
+	router.HandleFunc("/edit.html", editHandler).Methods("GET")
 	router.HandleFunc("/save", saveHandler).Methods("POST")
 	router.HandleFunc("/delete", deleteHandler).Methods("GET")
 
