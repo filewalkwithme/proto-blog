@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"text/template"
 	"time"
 )
@@ -50,20 +50,22 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 
 // new post page
 func postHandler(response http.ResponseWriter, request *http.Request) {
-	v := request.URL.Query()
-	pID := v.Get("id")
-
-	stmt, err := DB.Prepare("select id, post, date from post where id = ?")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-	var id int
+	var id = -1
 	var post string
 	var date time.Time
-	err = stmt.QueryRow(pID).Scan(&id, &post, &date)
-	if err != nil {
-		log.Fatal(err)
+
+	v := request.URL.Query()
+	pID := v.Get("id")
+	if len(pID) > 0 {
+		stmt, err := DB.Prepare("select id, post, date from post where id = ?")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer stmt.Close()
+		err = stmt.QueryRow(pID).Scan(&id, &post, &date)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	type Page struct {
@@ -87,21 +89,39 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 	pPost := request.FormValue("post")
 	pDate := time.Now()
 
-	tx, err := DB.Begin()
-	if err != nil {
-		log.Fatal(err)
+	if pID == "-1" {
+		tx, err := DB.Begin()
+		if err != nil {
+			log.Fatal(err)
+		}
+		stmt, err := tx.Prepare("insert into post (post, date) values (?, ?)")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer stmt.Close()
+		r, err := stmt.Exec(pPost, pDate)
+		lastID, _ := r.LastInsertId()
+		pID = strconv.Itoa(int(lastID))
+		if err != nil {
+			log.Fatal(err)
+		}
+		tx.Commit()
+		http.Redirect(response, request, "/post.html?id="+pID, 302)
+	} else {
+		tx, err := DB.Begin()
+		if err != nil {
+			log.Fatal(err)
+		}
+		stmt, err := tx.Prepare("update post set post=?, date=? where id = ?")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer stmt.Close()
+		_, err = stmt.Exec(pPost, pDate, pID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		tx.Commit()
+		http.Redirect(response, request, request.Referer(), 302)
 	}
-	stmt, err := tx.Prepare("update post set post=?, date=? where id = ?")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-	_, err = stmt.Exec(pPost, pDate, pID)
-	if err != nil {
-		log.Fatal(err)
-	}
-	tx.Commit()
-
-	fmt.Printf("RequestURI: %v \n", request.Referer())
-	http.Redirect(response, request, request.Referer(), 302)
 }
