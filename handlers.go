@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -77,4 +78,30 @@ func postHandler(response http.ResponseWriter, request *http.Request) {
 	t := template.Must(template.New("page").Parse(indexPage))
 
 	t.Execute(response, page)
+}
+
+// new post page
+func saveHandler(response http.ResponseWriter, request *http.Request) {
+	request.ParseForm()
+	pID := request.FormValue("id")
+	pPost := request.FormValue("post")
+	pDate := time.Now()
+
+	tx, err := DB.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+	stmt, err := tx.Prepare("update post set post=?, date=? where id = ?")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(pPost, pDate, pID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tx.Commit()
+
+	fmt.Printf("RequestURI: %v \n", request.Referer())
+	http.Redirect(response, request, request.Referer(), 302)
 }
