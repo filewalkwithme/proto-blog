@@ -2,6 +2,7 @@
   <head>
     <script src="assets/js/showdown.js"></script>
     <script src="assets/js/jquery-1.11.3.min.js"></script>
+    <script src="assets/js/jquery-ui.js"></script>
     <script>
       var converter = new showdown.Converter();
 
@@ -30,6 +31,21 @@
         });
 
         update();
+
+        $('#post-editor').dialog({
+            autoOpen: true,
+            width: 600,
+            modal: false,
+            appendTo: "#anchor",
+            buttons: {
+                "Ok": function () {
+                    $(this).dialog("close");
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
       });
 
       function htmlUnescape(value){
@@ -42,26 +58,26 @@
               .replace(/&amp;/g, '&');
       }
     </script>
+    <link rel="stylesheet" href="assets/css/custom-theme/jquery-ui-1.10.3.custom.css">
   </head>
-  <body>
+  <body id="anchor">
 
-    <form method="POST" action="save">
-      <div style="width: 100%;">
-        <div style="float: left; width: 10%;">
-          <button id="btnInsertList">Insert List</button>
-            <input type="hidden" name="id" value="{{.ID}}"/>
-            <input type="submit" id="btnSave" value="Save"/>
-            <a href="/">Home</a>
-        </div>
-        <div style="float: left; width: 35%;" >
-          <input type="text" name="title" value="{{.Title}}"/>
-          <textarea name="content" id="src" rows="20" style="width:80%">{{.Content}}</textarea>
-        </div>
-        <div style="float: left; width: 55%;">
-          <div id="target" style="white-space: pre;">output</div>
-        </div>
-        <br style="clear: left;" />
+      <div id="post-editor" title="Post editor" >
+        <form method="POST" action="save">
+          <input type="text" name="title" value="{{.Title}}" style="width:100%"/>
+          <textarea name="content" id="src" style="height:90%;width:100%">{{.Content}}</textarea>
+          <input type="hidden" name="id" value="{{.ID}}"/>
+          <input type="submit" id="btnSave" value="Save"/>
+
+        </form>
       </div>
-    </form>
+
+
+      <div style="width: 100%;">
+          <button id="btnInsertList">Insert List</button>
+          <a href="/">Home</a>
+          <div id="target" style="white-space: pre;">output</div>
+      </div>
+
   </body>
 </html>
