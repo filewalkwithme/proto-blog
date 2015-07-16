@@ -23,7 +23,7 @@ var indexPage string
 func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	var posts []Post
 
-	rows, err := DB.Query("select id, content, title, date from posts")
+	rows, err := DB.Query("select id, src_content, title, date from posts")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,7 +61,7 @@ func postHandler(response http.ResponseWriter, request *http.Request) {
 	v := request.URL.Query()
 	pID := v.Get("id")
 	if len(pID) > 0 {
-		stmt, err := DB.Prepare("select id, title, content, date from posts where id = ?")
+		stmt, err := DB.Prepare("select id, title, html_content, date from posts where id = ?")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -99,7 +99,7 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 	v := request.URL.Query()
 	pID := v.Get("id")
 	if len(pID) > 0 {
-		stmt, err := DB.Prepare("select id, title, content, date from posts where id = ?")
+		stmt, err := DB.Prepare("select id, title, src_content, date from posts where id = ?")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -130,7 +130,8 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 	request.ParseForm()
 	pID := request.FormValue("id")
 	pTitle := request.FormValue("title")
-	pContent := request.FormValue("content")
+	pSrcContent := request.FormValue("src_content")
+	pHtmlContent := request.FormValue("html_content")
 	pDate := time.Now()
 
 	if pID == "-1" {
@@ -138,12 +139,12 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		stmt, err := tx.Prepare("insert into posts (title, content, date) values (?, ?, ?)")
+		stmt, err := tx.Prepare("insert into posts (title, src_content, html_content, date) values (?, ?, ?, ?)")
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer stmt.Close()
-		r, err := stmt.Exec(pTitle, pContent, pDate)
+		r, err := stmt.Exec(pTitle, pSrcContent, pHtmlContent, pDate)
 		lastID, _ := r.LastInsertId()
 		pID = strconv.Itoa(int(lastID))
 		if err != nil {
@@ -155,12 +156,12 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		stmt, err := tx.Prepare("update posts set title=?, content=?, date=? where id = ?")
+		stmt, err := tx.Prepare("update posts set title=?, src_content=?, html_content=?, date=? where id = ?")
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer stmt.Close()
-		_, err = stmt.Exec(pTitle, pContent, pDate, pID)
+		_, err = stmt.Exec(pTitle, pSrcContent, pHtmlContent, pDate, pID)
 		if err != nil {
 			log.Fatal(err)
 		}

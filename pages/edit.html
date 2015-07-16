@@ -67,6 +67,7 @@
             appendTo: "#anchor",
             buttons: {
                 "Save": function () {
+                  $("#html_content").val($("#target").html())
                   $("#form").submit();
                 },
                 "Insert List": function () {
@@ -100,8 +101,9 @@
       <div style="height:100%">
         <form id="form" method="POST" action="save" style="height:100%">
           <input type="text" name="title" value="{{.Title}}" style="width:100%"/>
-          <textarea name="content" id="src" style="width:100%; height:90%">{{.Content}}</textarea>
+          <textarea name="src_content" id="src" style="width:100%; height:90%">{{.Content}}</textarea>
           <input type="hidden" name="id" value="{{.ID}}"/>
+          <input type="hidden" id="html_content" name="html_content" value=""/>
         </form>
       </div>
     </div>
@@ -112,7 +114,7 @@
         <h1>New Post</h1>
       </div>
 
-      <div id="target" style="white-space: pre;">output</div>
+      <div id="target">output</div>
 
       <hr/>
       <p>Posted at </p>

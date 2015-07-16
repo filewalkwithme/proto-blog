@@ -28,7 +28,7 @@ func init() {
 	if os.IsNotExist(errCheckExists) {
 		fmt.Printf("File blog.db not exists. \nCreating initial database.\n")
 
-		sqlCreateDB := `create table posts (id integer not null primary key, title text, content text, date datetime);`
+		sqlCreateDB := `create table posts (id integer not null primary key, title text, src_content text, html_content text, date datetime);`
 
 		_, err = db.Exec(sqlCreateDB)
 		if err != nil {
