@@ -32,6 +32,9 @@
     <script src="assets/js/jquery-ui.js"></script>
     <script>
       var converter = new showdown.Converter();
+      function update_title(){
+        $("#title").html($("#input_title").val());
+      }
 
       function update(){
         var srcText = $('#src').val();
@@ -40,6 +43,9 @@
       }
 
       $(document).ready(function() {
+        $("#input_title").on('input', function() {
+          update_title()
+        });
 
         $("#src").on('input', function() {
           update()
@@ -57,6 +63,7 @@
             update();
         }
 
+        update_title();
         update();
 
         $('#post-editor').dialog({
@@ -100,7 +107,7 @@
     <div id="post-editor" title="Post editor" >
       <div style="height:100%">
         <form id="form" method="POST" action="save" style="height:100%">
-          <input type="text" name="title" value="{{.Title}}" style="width:100%"/>
+          <input type="text" name="title" id="input_title" value="{{.Title}}" style="width:100%"/>
           <textarea name="src_content" id="src" style="width:100%; height:90%">{{.Content}}</textarea>
           <input type="hidden" name="id" value="{{.ID}}"/>
           <input type="hidden" id="html_content" name="html_content" value=""/>
@@ -111,8 +118,10 @@
     <!-- Begin page content -->
     <div class="container">
       <div class="page-header">
-        <h1>New Post</h1>
+        <h1>{{.BlogTitle}}</h1>
       </div>
+
+      <p><h1 id="title">title</h1>({{.Date}} by {{.Author}})</p>
 
       <div id="target">output</div>
 

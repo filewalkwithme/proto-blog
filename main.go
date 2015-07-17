@@ -17,6 +17,8 @@ var router = mux.NewRouter()
 //DB is the global DB object
 var DB *sql.DB
 var cfg *ini.ConfigFile
+var blogTitle string
+var authorName string
 
 func init() {
 	cfg, err := ini.LoadConfigFile("blog.cfg")
@@ -24,11 +26,15 @@ func init() {
 		log.Fatal(err)
 	}
 
-	authorName, err := cfg.GetValue("author", "name")
+	authorName, err = cfg.GetValue("author", "name")
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%v \n", authorName)
+
+	blogTitle, err = cfg.GetValue("blog", "title")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	_, errCheckExists := os.Stat("./blog.db")
 
@@ -56,7 +62,7 @@ func init() {
 
 func main() {
 	router.HandleFunc("/", indexPageHandler).Methods("GET")
-	router.HandleFunc("/post.html", postHandler).Methods("GET")
+	router.HandleFunc("/post.html", viewPostHandler).Methods("GET")
 	router.HandleFunc("/edit.html", editHandler).Methods("GET")
 	router.HandleFunc("/save", saveHandler).Methods("POST")
 	router.HandleFunc("/delete", deleteHandler).Methods("GET")

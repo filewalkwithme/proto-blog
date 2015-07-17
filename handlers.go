@@ -39,9 +39,10 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	rows.Close()
 
 	type Page struct {
-		Posts []Post
+		BlogTitle string
+		Posts     []Post
 	}
-	var page = Page{Posts: posts}
+	var page = Page{BlogTitle: blogTitle, Posts: posts}
 
 	bufIndexPage, _ := ioutil.ReadFile("pages/index.html")
 	indexPage = string(bufIndexPage)
@@ -52,7 +53,7 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 // new post page
-func postHandler(response http.ResponseWriter, request *http.Request) {
+func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 	var id = -1
 	var title string
 	var content string
@@ -72,11 +73,14 @@ func postHandler(response http.ResponseWriter, request *http.Request) {
 		}
 
 		type Page struct {
-			ID      int
-			Title   string
-			Content string
+			ID        int
+			BlogTitle string
+			Title     string
+			Author    string
+			Date      string
+			Content   string
 		}
-		var page = Page{ID: id, Title: title, Content: content}
+		var page = Page{ID: id, BlogTitle: blogTitle, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
 		bufIndexPage, _ := ioutil.ReadFile("pages/post.html")
 		indexPage = string(bufIndexPage)
@@ -94,7 +98,7 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 	var id = -1
 	var title string
 	var content string
-	var date time.Time
+	var date = time.Now()
 
 	v := request.URL.Query()
 	pID := v.Get("id")
@@ -111,11 +115,14 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 	}
 
 	type Page struct {
-		ID      int
-		Title   string
-		Content string
+		ID        int
+		BlogTitle string
+		Title     string
+		Author    string
+		Date      string
+		Content   string
 	}
-	var page = Page{ID: id, Title: title, Content: content}
+	var page = Page{ID: id, BlogTitle: blogTitle, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
 	bufIndexPage, _ := ioutil.ReadFile("pages/edit.html")
 	indexPage = string(bufIndexPage)
@@ -131,7 +138,7 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 	pID := request.FormValue("id")
 	pTitle := request.FormValue("title")
 	pSrcContent := request.FormValue("src_content")
-	pHtmlContent := request.FormValue("html_content")
+	pHTMLContent := request.FormValue("html_content")
 	pDate := time.Now()
 
 	if pID == "-1" {
@@ -144,7 +151,7 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 			log.Fatal(err)
 		}
 		defer stmt.Close()
-		r, err := stmt.Exec(pTitle, pSrcContent, pHtmlContent, pDate)
+		r, err := stmt.Exec(pTitle, pSrcContent, pHTMLContent, pDate)
 		lastID, _ := r.LastInsertId()
 		pID = strconv.Itoa(int(lastID))
 		if err != nil {
@@ -161,7 +168,7 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 			log.Fatal(err)
 		}
 		defer stmt.Close()
-		_, err = stmt.Exec(pTitle, pSrcContent, pHtmlContent, pDate, pID)
+		_, err = stmt.Exec(pTitle, pSrcContent, pHTMLContent, pDate, pID)
 		if err != nil {
 			log.Fatal(err)
 		}
