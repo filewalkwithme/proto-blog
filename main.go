@@ -18,6 +18,7 @@ var router = mux.NewRouter()
 var DB *sql.DB
 var cfg *ini.ConfigFile
 var blogTitle string
+var blogDescription string
 var authorName string
 
 func init() {
@@ -32,6 +33,11 @@ func init() {
 	}
 
 	blogTitle, err = cfg.GetValue("blog", "title")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	blogDescription, err = cfg.GetValue("blog", "description")
 	if err != nil {
 		log.Fatal(err)
 	}

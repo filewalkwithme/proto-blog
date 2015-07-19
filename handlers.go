@@ -42,10 +42,11 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	rows.Close()
 
 	type Page struct {
-		BlogTitle string
-		Posts     []Post
+		BlogTitle       string
+		BlogDescription string
+		Posts           []Post
 	}
-	var page = Page{BlogTitle: blogTitle, Posts: posts}
+	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription, Posts: posts}
 
 	bufIndexPage, _ := ioutil.ReadFile("pages/index.html")
 	indexPage = string(bufIndexPage)
@@ -59,31 +60,34 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 	var id = -1
 	var title string
+	var shortDescription string
 	var content string
 	var date time.Time
 
 	v := request.URL.Query()
 	pID := v.Get("id")
 	if len(pID) > 0 {
-		stmt, err := DB.Prepare("select id, title, html_content, date from posts where id = ?")
+		stmt, err := DB.Prepare("select id, title, short_description, html_content, date from posts where id = ?")
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer stmt.Close()
-		err = stmt.QueryRow(pID).Scan(&id, &title, &content, &date)
+		err = stmt.QueryRow(pID).Scan(&id, &title, &shortDescription, &content, &date)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		type Page struct {
-			ID        int
-			BlogTitle string
-			Title     string
-			Author    string
-			Date      string
-			Content   string
+			ID               int
+			BlogTitle        string
+			BlogDescription  string
+			Title            string
+			ShortDescription string
+			Author           string
+			Date             string
+			Content          string
 		}
-		var page = Page{ID: id, BlogTitle: blogTitle, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
+		var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, Title: title, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
 		bufIndexPage, _ := ioutil.ReadFile("pages/post.html")
 		indexPage = string(bufIndexPage)
@@ -99,9 +103,9 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 // new post page
 func editHandler(response http.ResponseWriter, request *http.Request) {
 	var id = -1
-	var title string
+	var title = "Title"
 	var content string
-	var shortDescription string
+	var shortDescription = "Short Description"
 	var date = time.Now()
 
 	v := request.URL.Query()
@@ -121,13 +125,14 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 	type Page struct {
 		ID               int
 		BlogTitle        string
+		BlogDescription  string
 		ShortDescription string
 		Title            string
 		Author           string
 		Date             string
 		Content          string
 	}
-	var page = Page{ID: id, BlogTitle: blogTitle, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
+	var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
 	bufIndexPage, _ := ioutil.ReadFile("pages/edit.html")
 	indexPage = string(bufIndexPage)

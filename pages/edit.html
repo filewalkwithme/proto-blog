@@ -36,6 +36,10 @@
         $("#title").html($("#input_title").val());
       }
 
+      function update_short_description(){
+        $("#short_description").html($("#input_short_description").val());
+      }
+
       function update(){
         var srcText = $('#src').val();
         var html = converter.makeHtml(srcText);
@@ -45,6 +49,10 @@
       $(document).ready(function() {
         $("#input_title").on('input', function() {
           update_title()
+        });
+
+        $("#input_short_description").on('input', function() {
+          update_short_description()
         });
 
         $("#src").on('input', function() {
@@ -64,6 +72,7 @@
         }
 
         update_title();
+        update_short_description();
         update();
 
         $('#post-editor').dialog({
@@ -109,7 +118,7 @@
       <div style="height:100%">
         <form id="form" method="POST" action="save" style="height:100%">
           <input type="text" name="title" id="input_title" value="{{.Title}}" style="width:100%"/>
-          <input type="text" name="short_description" id="short_description" value="{{.ShortDescription}}" style="width:100%"/>
+          <input type="text" name="short_description" id="input_short_description" value="{{.ShortDescription}}" style="width:100%"/>
           <textarea name="src_content" id="src" style="width:100%; height:90%">{{.Content}}</textarea>
           <input type="hidden" name="id" value="{{.ID}}"/>
           <input type="hidden" id="html_content" name="html_content" value=""/>
@@ -120,20 +129,16 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class="blog-nav-item active" href="#">Home</a>
-          <a class="blog-nav-item" href="#">New features</a>
-          <a class="blog-nav-item" href="#">Press</a>
-          <a class="blog-nav-item" href="#">New hires</a>
-          <a class="blog-nav-item" href="#">About</a>
+          <a class="blog-nav-item active" href="/">Home</a>
+          <a class="blog-nav-item" href="/about.html">About</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
-
       <div class="blog-header">
         <h1 class="blog-title">{{.BlogTitle}}</h1>
-        <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p>
+        <p class="lead blog-description">{{.BlogDescription}}</p>
       </div>
 
       <div class="row">
@@ -143,6 +148,8 @@
           <div class="blog-post">
             <h2 class="blog-post-title" id="title">title</h2>
             <p class="blog-post-meta">{{.Date}} by <a href="#">{{.Author}}</a></p>
+            <p id="short_description">short description</p>
+            <hr>
 
             <div id="target">output</div>
           </div><!-- /.blog-post -->
@@ -159,23 +166,6 @@
           <div class="sidebar-module sidebar-module-inset">
             <h4>About</h4>
             <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-          </div>
-          <div class="sidebar-module">
-            <h4>Archives</h4>
-            <ol class="list-unstyled">
-              <li><a href="#">March 2014</a></li>
-              <li><a href="#">February 2014</a></li>
-              <li><a href="#">January 2014</a></li>
-              <li><a href="#">December 2013</a></li>
-              <li><a href="#">November 2013</a></li>
-              <li><a href="#">October 2013</a></li>
-              <li><a href="#">September 2013</a></li>
-              <li><a href="#">August 2013</a></li>
-              <li><a href="#">July 2013</a></li>
-              <li><a href="#">June 2013</a></li>
-              <li><a href="#">May 2013</a></li>
-              <li><a href="#">April 2013</a></li>
-            </ol>
           </div>
           <div class="sidebar-module">
             <h4>Elsewhere</h4>
