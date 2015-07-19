@@ -68,6 +68,7 @@ func init() {
 
 func main() {
 	router.HandleFunc("/", indexPageHandler).Methods("GET")
+	router.HandleFunc("/login.html", loginPageHandler).Methods("GET")
 	router.HandleFunc("/post.html", viewPostHandler).Methods("GET")
 	router.HandleFunc("/edit.html", editHandler).Methods("GET")
 	router.HandleFunc("/save", saveHandler).Methods("POST")

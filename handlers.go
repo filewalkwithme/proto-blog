@@ -56,6 +56,20 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	t.Execute(response, page)
 }
 
+// index page
+func loginPageHandler(response http.ResponseWriter, request *http.Request) {
+	type Page struct {
+		BlogTitle       string
+		BlogDescription string
+	}
+	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription}
+
+	bufPage, _ := ioutil.ReadFile("pages/login.html")
+	t := template.Must(template.New("page").Parse(string(bufPage)))
+
+	t.Execute(response, page)
+}
+
 // new post page
 func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 	var id = -1
