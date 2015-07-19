@@ -52,25 +52,16 @@
       <div class="row">
 
         <div class="col-sm-8 blog-main">
+          {{range .Posts}}
+          <div class="blog-post">
+            <h2 class="blog-post-title"><a href="/post.html?id={{.ID}}">{{.Title}}</a></h2>
+            <p class="blog-post-meta">{{.Date}} by <a href="#">{{.Author}}</a></p>
 
-          <table class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Commands</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{range .Posts}}
-              <tr>
-                <td><a href="post.html?id={{.ID}}">{{.Title}}</a></td>
-                <td>{{.Date}}</td>
-                <td><a href="edit.html?id={{.ID}}">Edit</a> / <a href="delete?id={{.ID}}">Delete</a></td>
-              </tr>
-              {{end}}
-            </tbody>
-          </table>
+            <p>{{.ShortDescription}}</p>
+            <a href="/post.html?id={{.ID}}">read more...</a>
+            <hr>
+          </div><!-- /.blog-post -->
+          {{end}}
 
           <nav>
             <ul class="pager">
