@@ -4,10 +4,15 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"text/template"
 	"time"
+
+	"github.com/gorilla/sessions"
 )
+
+var store = sessions.NewCookieStore([]byte("something-very-secret"))
 
 //Post represents the post entry
 type Post struct {
@@ -56,8 +61,41 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	t.Execute(response, page)
 }
 
-// index page
+func loginHandler(response http.ResponseWriter, request *http.Request) {
+	request.ParseForm()
+	pUsername := request.FormValue("username")
+	pPassword := request.FormValue("password")
+
+	envPassword := os.Getenv("blog_password_" + pUsername)
+	if len(envPassword) > 0 {
+		if authorUsername == pUsername && envPassword == pPassword {
+			session, _ := store.Get(request, "blog-session")
+			session.Values["admin-logged"] = true
+			session.Save(request, response)
+			http.Redirect(response, request, "/", 302)
+			return
+		}
+	}
+
+	http.Redirect(response, request, "/login.html", 302)
+}
+
+func logoutHandler(response http.ResponseWriter, request *http.Request) {
+	session, _ := store.Get(request, "blog-session")
+	session.Values["admin-logged"] = false
+	session.Save(request, response)
+
+	http.Redirect(response, request, "/", 302)
+}
+
+// login page
 func loginPageHandler(response http.ResponseWriter, request *http.Request) {
+	session, _ := store.Get(request, "blog-session")
+	if session.Values["admin-logged"] == true {
+		http.Redirect(response, request, "/", 302)
+		return
+	}
+
 	type Page struct {
 		BlogTitle       string
 		BlogDescription string

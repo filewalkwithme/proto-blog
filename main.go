@@ -20,6 +20,7 @@ var cfg *ini.ConfigFile
 var blogTitle string
 var blogDescription string
 var authorName string
+var authorUsername string
 
 func init() {
 	cfg, err := ini.LoadConfigFile("blog.cfg")
@@ -28,6 +29,11 @@ func init() {
 	}
 
 	authorName, err = cfg.GetValue("author", "name")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	authorUsername, err = cfg.GetValue("author", "username")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -68,6 +74,8 @@ func init() {
 
 func main() {
 	router.HandleFunc("/", indexPageHandler).Methods("GET")
+	router.HandleFunc("/login", loginHandler).Methods("POST")
+	router.HandleFunc("/logout", logoutHandler).Methods("GET")
 	router.HandleFunc("/login.html", loginPageHandler).Methods("GET")
 	router.HandleFunc("/post.html", viewPostHandler).Methods("GET")
 	router.HandleFunc("/edit.html", editHandler).Methods("GET")
