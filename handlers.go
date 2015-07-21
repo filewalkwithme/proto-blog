@@ -28,6 +28,7 @@ var indexPage string
 
 // index page
 func indexPageHandler(response http.ResponseWriter, request *http.Request) {
+	session, _ := store.Get(request, "blog-session")
 	var posts []Post
 
 	rows, err := DB.Query("select id, html_content, short_description, title, date from posts")
@@ -49,9 +50,10 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	type Page struct {
 		BlogTitle       string
 		BlogDescription string
+		AdminLogged     bool
 		Posts           []Post
 	}
-	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription, Posts: posts}
+	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Posts: posts}
 
 	bufIndexPage, _ := ioutil.ReadFile("pages/index.html")
 	indexPage = string(bufIndexPage)
@@ -62,6 +64,12 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 func loginHandler(response http.ResponseWriter, request *http.Request) {
+	session, _ := store.Get(request, "blog-session")
+	if session.Values["admin-logged"] == true {
+		http.Redirect(response, request, "/", 302)
+		return
+	}
+
 	request.ParseForm()
 	pUsername := request.FormValue("username")
 	pPassword := request.FormValue("password")
@@ -82,6 +90,11 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 
 func logoutHandler(response http.ResponseWriter, request *http.Request) {
 	session, _ := store.Get(request, "blog-session")
+	if session.Values["admin-logged"] != true {
+		http.Redirect(response, request, "/", 302)
+		return
+	}
+
 	session.Values["admin-logged"] = false
 	session.Save(request, response)
 
@@ -110,6 +123,7 @@ func loginPageHandler(response http.ResponseWriter, request *http.Request) {
 
 // new post page
 func viewPostHandler(response http.ResponseWriter, request *http.Request) {
+	session, _ := store.Get(request, "blog-session")
 	var id = -1
 	var title string
 	var shortDescription string
@@ -133,13 +147,14 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 			ID               int
 			BlogTitle        string
 			BlogDescription  string
+			AdminLogged      bool
 			Title            string
 			ShortDescription string
 			Author           string
 			Date             string
 			Content          string
 		}
-		var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, Title: title, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
+		var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Title: title, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
 		bufIndexPage, _ := ioutil.ReadFile("pages/post.html")
 		indexPage = string(bufIndexPage)
@@ -154,6 +169,12 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 
 // new post page
 func editHandler(response http.ResponseWriter, request *http.Request) {
+	session, _ := store.Get(request, "blog-session")
+	if session.Values["admin-logged"] != true {
+		http.Redirect(response, request, "/", 302)
+		return
+	}
+
 	var id = -1
 	var title = "Title"
 	var content string
@@ -178,13 +199,14 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 		ID               int
 		BlogTitle        string
 		BlogDescription  string
+		AdminLogged      bool
 		ShortDescription string
 		Title            string
 		Author           string
 		Date             string
 		Content          string
 	}
-	var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
+	var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
 	bufIndexPage, _ := ioutil.ReadFile("pages/edit.html")
 	indexPage = string(bufIndexPage)
@@ -196,6 +218,12 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 
 // new post page
 func saveHandler(response http.ResponseWriter, request *http.Request) {
+	session, _ := store.Get(request, "blog-session")
+	if session.Values["admin-logged"] != true {
+		http.Redirect(response, request, "/", 302)
+		return
+	}
+
 	request.ParseForm()
 	pID := request.FormValue("id")
 	pTitle := request.FormValue("title")
@@ -242,6 +270,12 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 
 // new post page
 func deleteHandler(response http.ResponseWriter, request *http.Request) {
+	session, _ := store.Get(request, "blog-session")
+	if session.Values["admin-logged"] != true {
+		http.Redirect(response, request, "/", 302)
+		return
+	}
+
 	v := request.URL.Query()
 	pID := v.Get("id")
 

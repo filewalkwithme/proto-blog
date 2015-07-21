@@ -34,7 +34,7 @@
         <nav class="blog-nav">
           <a class="blog-nav-item active" href="/">Home</a>
           <a class="blog-nav-item" href="/about.html">About</a>
-          <a class="blog-nav-item" href="/logout">Logout</a>
+          {{if .AdminLogged}}<a class="blog-nav-item" href="/logout">Logout</a>{{end}}
         </nav>
       </div>
     </div>
@@ -63,7 +63,7 @@
 
           <nav>
             <ul class="pager">
-              <li><a href="edit.html">New Post</a></li>
+              {{if .AdminLogged}}<li><a href="edit.html">New Post</a></li>{{end}}
             </ul>
           </nav>
 
