@@ -82,6 +82,7 @@
             modal: false,
             appendTo: "#anchor",
             buttons: {
+
                 "Save": function () {
                   $("#html_content").val($("#target").html())
                   $("#form").submit();
@@ -117,9 +118,47 @@
     <div id="post-editor" title="Post editor" >
       <div style="height:100%">
         <form id="form" method="POST" action="save" style="height:100%">
-          <input type="text" name="title" id="input_title" value="{{.Title}}" placeholder="Title" style="width:100%"/>
+          <input type="text" name="title" id="input_title" value="{{.Title}}" placeholder="Title" style="width:100%; margin:5px 0px"/>
 
-          <input type="text" name="short_description" id="input_short_description" value="{{.ShortDescription}}" placeholder="Short Decription" style="width:100%"/>
+          <input type="text" name="short_description" id="input_short_description" value="{{.ShortDescription}}" placeholder="Short Decription" style="width:100%; margin-bottom:5px"/>
+          <div style="margin-bottom:5px">
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>1
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>2
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>3
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-comment" aria-hidden="true"/>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-list" aria-hidden="true"/>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-list" aria-hidden="true"/>123
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-console" aria-hidden="true"/>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-option-horizontal" aria-hidden="true"/>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"/>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-bold" aria-hidden="true"/>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-italic" aria-hidden="true"/>
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Left Align">
+              <span class="glyphicon glyphicon glyphicon-picture" aria-hidden="true"/>
+            </button>
+          </div>
           <textarea name="src_content" id="src" style="width:100%; height:90%">{{.Content}}</textarea>
           <input type="hidden" name="id" value="{{.ID}}"/>
           <input type="hidden" id="html_content" name="html_content" value=""/>
