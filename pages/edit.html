@@ -46,7 +46,84 @@
         $("#target").html(html);
       }
 
+      var lastSelectionEnd = 0
       $(document).ready(function() {
+        $("#btnMD_H1").on('click', function() {
+          var caretPos = document.getElementById("src").selectionEnd;
+          var textAreaTxt = jQuery("#src").val();
+
+          var i = caretPos;
+          while (i >= 0) {
+            i = i - 1
+            if (textAreaTxt.charAt(i)=="\n") {
+              i = i + 1
+              break
+            }
+          }
+          var firstPart = textAreaTxt.substring(0, i)
+          var secondPart = textAreaTxt.substring(i)
+
+          $("#src").val(firstPart + "#"+secondPart.replace(/^[\#>]*/, ''));
+          update();
+        });
+
+        $("#btnMD_H2").on('click', function() {
+          var caretPos = document.getElementById("src").selectionEnd;
+          var textAreaTxt = jQuery("#src").val();
+
+          var i = caretPos;
+          while (i >= 0) {
+            i = i - 1
+            if (textAreaTxt.charAt(i)=="\n") {
+              i = i + 1
+              break
+            }
+          }
+          var firstPart = textAreaTxt.substring(0, i)
+          var secondPart = textAreaTxt.substring(i)
+
+          $("#src").val(firstPart + "##"+secondPart.replace(/^[\#>]*/, ''));
+          update();
+        });
+
+        $("#btnMD_H3").on('click', function() {
+          var caretPos = document.getElementById("src").selectionEnd;
+          var textAreaTxt = jQuery("#src").val();
+
+          var i = caretPos;
+          while (i >= 0) {
+            i = i - 1
+            if (textAreaTxt.charAt(i)=="\n") {
+              i = i + 1
+              break
+            }
+          }
+          var firstPart = textAreaTxt.substring(0, i)
+          var secondPart = textAreaTxt.substring(i)
+
+          $("#src").val(firstPart + "###"+secondPart.replace(/^[\#>]*/, ''));
+          update();
+        });
+
+        $("#btnMD_quote").on('click', function() {
+          var caretPos = document.getElementById("src").selectionEnd;
+          var textAreaTxt = jQuery("#src").val();
+
+          var i = caretPos;
+          while (i >= 0) {
+            i = i - 1
+            if (textAreaTxt.charAt(i)=="\n") {
+              i = i + 1
+              break
+            }
+          }
+          var firstPart = textAreaTxt.substring(0, i)
+          var secondPart = textAreaTxt.substring(i)
+
+          $("#src").val(firstPart + ">"+secondPart.replace(/^[\#>]*/, ''));
+          update();
+        });
+
         $("#input_title").on('input', function() {
           update_title()
         });
@@ -122,16 +199,16 @@
 
           <input type="text" name="short_description" id="input_short_description" value="{{.ShortDescription}}" placeholder="Short Decription" style="width:100%; margin-bottom:5px"/>
           <div style="margin-bottom:5px">
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_H1" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>1
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_H2" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>2
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_H3" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>3
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_quote" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-comment" aria-hidden="true"/>
             </button>
             <button type="button" class="btn btn-default" aria-label="Left Align">
