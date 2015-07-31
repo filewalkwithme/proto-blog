@@ -151,7 +151,7 @@
             }
 
             if (end >= lineIni && end < lineEnd){
-              if (lines[i+1].length > 1){
+              if (i + 1 < lines.length && lines[i+1].length > 1){
                 l = "\n"
               }
               add = true
@@ -205,7 +205,7 @@
             }
 
             if (end >= lineIni && end < lineEnd){
-              if (lines[i+1].length > 1){
+              if (i + 1 < lines.length && lines[i+1].length > 1){
                 l = "\n"
               }
               add = true
