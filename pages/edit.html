@@ -140,7 +140,9 @@
 
             var add = false
             if (ini >= lineIni && ini < lineEnd){
-              f = "\n"
+              if (i > 0 && lines[i-1].length > 1){
+                f = "\n"
+              }
               add = true
             }
 
@@ -149,7 +151,9 @@
             }
 
             if (end >= lineIni && end < lineEnd){
-              l = "\n"
+              if (lines[i+1].length > 1){
+                l = "\n"
+              }
               add = true
             }
 
@@ -190,7 +194,9 @@
 
             var add = false
             if (ini >= lineIni && ini < lineEnd){
-              f = "\n"
+              if (i > 0 && lines[i-1].length > 1){
+                f = "\n"
+              }
               add = true
             }
 
@@ -199,7 +205,9 @@
             }
 
             if (end >= lineIni && end < lineEnd){
-              l = "\n"
+              if (lines[i+1].length > 1){
+                l = "\n"
+              }
               add = true
             }
 
