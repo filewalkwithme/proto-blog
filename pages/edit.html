@@ -232,6 +232,62 @@
           update();
         });
 
+        $("#btnMD_code").on('click', function() {
+          var textAreaTxt = jQuery("#src").val();
+
+          var ini = document.getElementById("src").selectionStart
+          var end = document.getElementById("src").selectionEnd
+
+          if (end > ini) {
+            var multiLine = false
+            for (i = ini; i < end; i++) {
+              if (textAreaTxt.charAt(i)=="\n") {
+                multiLine = true
+              }
+            }
+
+            if (multiLine) {
+              var lines = jQuery("#src").val().split('\n');
+              var newLines = new Array();
+
+              var lineIni = 0
+              for (i = 0; i < lines.length; i++) {
+                var f = ""
+                var l = ""
+                lineEnd = lineIni + lines[i].length + 1
+
+                if (ini >= lineIni && ini < lineEnd){
+                  newLines[i] = "```\n"+lines[i]
+                } else {
+                  if (end >= lineIni && end < lineEnd){
+                    newLines[i] = lines[i]+"\n```"
+                  } else {
+                    newLines[i] = lines[i]
+                  }
+                }
+
+                lineIni = lineIni + lines[i].length + 1
+              }
+
+              var output = ""
+              for (i = 0; i < newLines.length; i++) {
+                output = output + newLines[i]
+                if (i < newLines.length-1){
+                  output = output +"\n"
+                }
+              }
+              $("#src").val(output);
+            } else {
+              var firstPart = textAreaTxt.substring(0, i)
+              var secondPart = textAreaTxt.substring(i)
+
+              $("#src").val(textAreaTxt.substring(0, ini)+"`"+textAreaTxt.substring(ini, end)+"`"+textAreaTxt.substring(end));
+            }
+
+            update();
+          }
+        });
+
         $("#input_title").on('input', function() {
           update_title()
         });
@@ -325,7 +381,7 @@
             <button id="btnMD_orderedlist" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-list" aria-hidden="true"/>123
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_code" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-console" aria-hidden="true"/>
             </button>
             <button type="button" class="btn btn-default" aria-label="Left Align">
