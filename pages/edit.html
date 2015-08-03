@@ -288,6 +288,21 @@
           }
         });
 
+        $("#btnMD_linebreak").on('click', function() {
+          var textAreaTxt = jQuery("#src").val();
+          var ini = "0"+document.getElementById("src").selectionStart
+          var end = "0"+document.getElementById("src").selectionEnd
+
+          if (ini = end) {
+            var extra = "\n\n"
+            if (textAreaTxt.charAt(ini)=="\n") {
+              extra = "\n"
+            }
+            $("#src").val(textAreaTxt.substring(0, ini)+"\n\n---"+extra+textAreaTxt.substring(ini));
+          }
+          update();
+        });
+
         $("#input_title").on('input', function() {
           update_title()
         });
@@ -384,7 +399,7 @@
             <button id="btnMD_code" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-console" aria-hidden="true"/>
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_linebreak" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-option-horizontal" aria-hidden="true"/>
             </button>
             <button type="button" class="btn btn-default" aria-label="Left Align">
