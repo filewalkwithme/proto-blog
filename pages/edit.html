@@ -187,6 +187,7 @@
           var newLines = new Array();
 
           var lineIni = 0
+          var lineNo = 1
           for (i = 0; i < lines.length; i++) {
             var f = ""
             var l = ""
@@ -212,7 +213,8 @@
             }
 
             if (add) {
-              newLines[i] = f+"1. "+lines[i]+l
+              newLines[i] = f+lineNo+". "+lines[i]+l
+              lineNo = lineNo+1
             } else {
               newLines[i] = lines[i]
             }
