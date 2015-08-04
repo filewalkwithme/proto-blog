@@ -305,6 +305,40 @@
           update();
         });
 
+        $("#btnMD_hyperlink").on('click', function() {
+          var textAreaTxt = jQuery("#src").val();
+
+          var ini = document.getElementById("src").selectionStart
+          var end = document.getElementById("src").selectionEnd
+
+          if (end > ini) {
+            var multiLine = false
+            for (i = ini; i < end; i++) {
+              if (textAreaTxt.charAt(i)=="\n") {
+                multiLine = true
+              }
+            }
+
+            if (multiLine == false) {
+              var firstPart = textAreaTxt.substring(0, ini)
+              var selection = textAreaTxt.substring(ini, end)
+              var secondPart = textAreaTxt.substring(end)
+              if (isUrl(selection) == false) {
+                selection = "http://"+selection
+              }
+
+              $("#src").val(firstPart+"["+selection+"]("+selection+")"+secondPart);
+            }
+
+            update();
+          }
+        });
+
+        function isUrl(s) {
+           var regexp = /(ftp|http|https):\/\/.*/
+           return regexp.test(s);
+        }
+
         $("#input_title").on('input', function() {
           update_title()
         });
@@ -404,7 +438,7 @@
             <button id="btnMD_linebreak" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-option-horizontal" aria-hidden="true"/>
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_hyperlink" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"/>
             </button>
             <button type="button" class="btn btn-default" aria-label="Left Align">
