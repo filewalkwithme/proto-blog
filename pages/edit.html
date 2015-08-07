@@ -388,11 +388,11 @@
             }
 
             if (multiLine==false) {
-              $("#src").val(textAreaTxt.substring(0, ini)+"![Insert alternative text]("+textAreaTxt.substring(ini, end)+" \"Optional title\")"+textAreaTxt.substring(end));
+              $("#src").val(textAreaTxt.substring(0, ini)+"![Insert alternative text]("+textAreaTxt.substring(ini, end)+")"+textAreaTxt.substring(end));
             }
           } else {
             if (ini == end) {
-              $("#src").val(textAreaTxt.substring(0, ini)+"![Insert alternative text](/path/to/image \"Optional title\")"+textAreaTxt.substring(end));
+              $("#src").val(textAreaTxt.substring(0, ini)+"![Insert alternative text](/path/to/image)"+textAreaTxt.substring(end));
             }
           }
           update();
@@ -415,18 +415,6 @@
           update()
         });
 
-        function btnInsertList () {
-            var caretPos = document.getElementById("src").selectionStart;
-            var textAreaTxt = jQuery("#src").val();
-            var txtToAdd = "\n\
-* Red\n\
-* Green\n\
-* Blue\n\
-";
-            $("#src").val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
-            update();
-        }
-
         update_title();
         update_short_description();
         update();
@@ -438,19 +426,9 @@
             modal: false,
             appendTo: "#anchor",
             buttons: {
-
                 "Save": function () {
                   $("#html_content").val($("#target").html())
                   $("#form").submit();
-                },
-                "Insert List": function () {
-                  btnInsertList();
-                },
-                "Ok": function () {
-                    $(this).dialog("close");
-                },
-                "Back": function () {
-                  window.location.replace("/");
                 }
             }
         });
@@ -478,42 +456,45 @@
 
           <input type="text" name="short_description" id="input_short_description" value="{{.ShortDescription}}" placeholder="Short Decription" style="width:100%; margin-bottom:5px"/>
           <div style="margin-bottom:5px">
-            <button id="btnMD_H1" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>1
-            </button>
-            <button id="btnMD_H2" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>2
-            </button>
-            <button id="btnMD_H3" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>3
-            </button>
-            <button id="btnMD_quote" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-comment" aria-hidden="true"/>
-            </button>
-            <button id="btnMD_list" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-list" aria-hidden="true"/>
-            </button>
-            <button id="btnMD_orderedlist" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-list" aria-hidden="true"/>123
-            </button>
-            <button id="btnMD_code" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-console" aria-hidden="true"/>
-            </button>
-            <button id="btnMD_linebreak" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-option-horizontal" aria-hidden="true"/>
-            </button>
-            <button id="btnMD_hyperlink" type="button" class="btn btn-default" aria-label="Left Align">
-              <span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"/>
-            </button>
-            <button id="btnMD_bold" type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_bold" type="button" class="btn btn-default" aria-label="Left Align" title="Bold">
               <span class="glyphicon glyphicon glyphicon-bold" aria-hidden="true"/>
             </button>
-            <button id="btnMD_italic" type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_italic" type="button" class="btn btn-default" aria-label="Left Align" title="Italic">
               <span class="glyphicon glyphicon glyphicon-italic" aria-hidden="true"/>
             </button>
-            <button id="btnMD_image" type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_H1" type="button" class="btn btn-default" aria-label="Left Align" title="Header 1">
+              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>1
+            </button>
+            <button id="btnMD_H2" type="button" class="btn btn-default" aria-label="Left Align" title="Header 2">
+              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>2
+            </button>
+            <button id="btnMD_H3" type="button" class="btn btn-default" aria-label="Left Align" title="Header 3">
+              <span class="glyphicon glyphicon glyphicon-header" aria-hidden="true"/>3
+            </button>
+            <button id="btnMD_image" type="button" class="btn btn-default" aria-label="Left Align" title="Image">
               <span class="glyphicon glyphicon glyphicon-picture" aria-hidden="true"/>
             </button>
+            <button id="btnMD_hyperlink" type="button" class="btn btn-default" aria-label="Left Align" title="Hyperlink">
+              <span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"/>
+            </button>
+
+
+            <button id="btnMD_quote" type="button" class="btn btn-default" aria-label="Left Align" title="Quote">
+              <span class="glyphicon glyphicon glyphicon-comment" aria-hidden="true"/>
+            </button>
+            <button id="btnMD_list" type="button" class="btn btn-default" aria-label="Left Align" title="List">
+              <span class="glyphicon glyphicon glyphicon-list" aria-hidden="true"/>
+            </button>
+            <button id="btnMD_orderedlist" type="button" class="btn btn-default" aria-label="Left Align" title="Ordered List">
+              <span class="glyphicon glyphicon glyphicon-list" aria-hidden="true"/>123
+            </button>
+            <button id="btnMD_code" type="button" class="btn btn-default" aria-label="Left Align" title="Code">
+              <span class="glyphicon glyphicon glyphicon-console" aria-hidden="true"/>
+            </button>
+            <button id="btnMD_linebreak" type="button" class="btn btn-default" aria-label="Left Align" title="Horizontal Line">
+              <span class="glyphicon glyphicon glyphicon-option-horizontal" aria-hidden="true"/>
+            </button>
+
           </div>
           <textarea name="src_content" id="src" style="width:100%; height:90%; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">{{.Content}}</textarea>
           <input type="hidden" name="id" value="{{.ID}}"/>
