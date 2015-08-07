@@ -334,6 +334,46 @@
           }
         });
 
+        $("#btnMD_bold").on('click', function() {
+          var textAreaTxt = jQuery("#src").val();
+
+          var ini = document.getElementById("src").selectionStart
+          var end = document.getElementById("src").selectionEnd
+          if (end > ini) {
+            var multiLine = false
+            for (i = ini; i < end; i++) {
+              if (textAreaTxt.charAt(i)=="\n") {
+                multiLine = true
+              }
+            }
+
+            if (multiLine==false) {
+              $("#src").val(textAreaTxt.substring(0, ini)+"**"+textAreaTxt.substring(ini, end)+"**"+textAreaTxt.substring(end));
+              update();
+            }
+          }
+        });
+
+        $("#btnMD_italic").on('click', function() {
+          var textAreaTxt = jQuery("#src").val();
+
+          var ini = document.getElementById("src").selectionStart
+          var end = document.getElementById("src").selectionEnd
+          if (end > ini) {
+            var multiLine = false
+            for (i = ini; i < end; i++) {
+              if (textAreaTxt.charAt(i)=="\n") {
+                multiLine = true
+              }
+            }
+
+            if (multiLine==false) {
+              $("#src").val(textAreaTxt.substring(0, ini)+"*"+textAreaTxt.substring(ini, end)+"*"+textAreaTxt.substring(end));
+              update();
+            }
+          }
+        });
+
         function isUrl(s) {
            var regexp = /(ftp|http|https):\/\/.*/
            return regexp.test(s);
@@ -441,10 +481,10 @@
             <button id="btnMD_hyperlink" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"/>
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_bold" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-bold" aria-hidden="true"/>
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_italic" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-italic" aria-hidden="true"/>
             </button>
             <button type="button" class="btn btn-default" aria-label="Left Align">
