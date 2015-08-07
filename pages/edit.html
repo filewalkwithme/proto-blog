@@ -452,12 +452,29 @@
             height: 480,
             modal: false,
             appendTo: "#anchor",
-            buttons: {
-                "Save": function () {
+            buttons: [
+              {
+                text: "Minimize",
+                click: function () {
+                  $("#post-editor").dialog( "option", "width", 40 );
+                  $("#post-editor").dialog( "option", "height", 40 );
+                }
+              },
+              {
+                text: "Maximize",
+                click: function () {
+                  $("#post-editor").dialog( "option", "width", 640 );
+                  $("#post-editor").dialog( "option", "height", 480 );
+                }
+              },
+              {
+                text: "Save",
+                click: function () {
                   $("#html_content").val($("#target").html())
                   $("#form").submit();
                 }
-            }
+              }
+            ]
         });
       });
 
