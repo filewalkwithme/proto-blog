@@ -374,6 +374,30 @@
           }
         });
 
+        $("#btnMD_image").on('click', function() {
+          var textAreaTxt = jQuery("#src").val();
+
+          var ini = document.getElementById("src").selectionStart
+          var end = document.getElementById("src").selectionEnd
+          if (end > ini) {
+            var multiLine = false
+            for (i = ini; i < end; i++) {
+              if (textAreaTxt.charAt(i)=="\n") {
+                multiLine = true
+              }
+            }
+
+            if (multiLine==false) {
+              $("#src").val(textAreaTxt.substring(0, ini)+"![Insert alternative text]("+textAreaTxt.substring(ini, end)+" \"Optional title\")"+textAreaTxt.substring(end));
+            }
+          } else {
+            if (ini == end) {
+              $("#src").val(textAreaTxt.substring(0, ini)+"![Insert alternative text](/path/to/image \"Optional title\")"+textAreaTxt.substring(end));
+            }
+          }
+          update();
+        });
+
         function isUrl(s) {
            var regexp = /(ftp|http|https):\/\/.*/
            return regexp.test(s);
@@ -487,7 +511,7 @@
             <button id="btnMD_italic" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-italic" aria-hidden="true"/>
             </button>
-            <button type="button" class="btn btn-default" aria-label="Left Align">
+            <button id="btnMD_image" type="button" class="btn btn-default" aria-label="Left Align">
               <span class="glyphicon glyphicon glyphicon-picture" aria-hidden="true"/>
             </button>
           </div>
