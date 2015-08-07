@@ -398,6 +398,29 @@
           update();
         });
 
+        //From: https://jadendreamer.wordpress.com/2013/04/24/jquery-tutorial-scroll-ui-dialog-boxes-with-the-page-as-it-scrolls/
+        //very smart and useful!
+        $(document).scroll(function(e){
+
+            if ($(".ui-widget-overlay")) //the dialog has popped up in modal view
+            {
+                //fix the overlay so it scrolls down with the page
+                $(".ui-widget-overlay").css({
+                    position: 'fixed',
+                    top: '0'
+                });
+
+                //get the current popup position of the dialog box
+                pos = $(".ui-dialog").position();
+
+                //adjust the dialog box so that it scrolls as you scroll the page
+                $(".ui-dialog").css({
+                    position: 'fixed',
+                    top: pos.y
+                });
+            }
+        });
+
         function isUrl(s) {
            var regexp = /(ftp|http|https):\/\/.*/
            return regexp.test(s);
