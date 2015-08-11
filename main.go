@@ -21,6 +21,7 @@ var blogTitle string
 var blogDescription string
 var authorName string
 var authorUsername string
+var secret string
 
 func init() {
 	cfg, err := ini.LoadConfigFile("blog.cfg")
@@ -44,6 +45,11 @@ func init() {
 	}
 
 	blogDescription, err = cfg.GetValue("blog", "description")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	secret, err = cfg.GetValue("blog", "secret")
 	if err != nil {
 		log.Fatal(err)
 	}

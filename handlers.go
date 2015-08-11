@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-var store = sessions.NewCookieStore([]byte("something-very-secret"))
+var store = sessions.NewCookieStore([]byte(secret))
 
 //Post represents the post entry
 type Post struct {
