@@ -205,8 +205,15 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 		Author           string
 		Date             string
 		Content          string
+		Pxy              string
 	}
-	var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
+
+	pxy, okPxy := session.Values["pxy"].(string)
+	if !okPxy {
+		pxy = "center center"
+	}
+
+	var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content, Pxy: pxy}
 
 	bufIndexPage, _ := ioutil.ReadFile("pages/edit.html")
 	indexPage = string(bufIndexPage)
@@ -230,7 +237,11 @@ func saveHandler(response http.ResponseWriter, request *http.Request) {
 	pShortDescription := request.FormValue("short_description")
 	pSrcContent := request.FormValue("src_content")
 	pHTMLContent := request.FormValue("html_content")
+	pPosition := request.FormValue("pxy")
 	pDate := time.Now()
+
+	session.Values["pxy"] = pPosition
+	session.Save(request, response)
 
 	if pID == "-1" {
 		tx, err := DB.Begin()

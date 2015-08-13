@@ -450,6 +450,7 @@
             autoOpen: true,
             width: 640,
             height: 480,
+            position: { my: "left top", at: "{{.Pxy}}", of: window },
             modal: false,
             appendTo: "#anchor",
             buttons: [
@@ -472,6 +473,8 @@
               {
                 text: "Save",
                 click: function () {
+                  var position = $( "#post-editor" ).dialog( "option", "position" );
+                  $("#pxy").val(position.at)
                   $("#html_content").val($("#target").html())
                   $("#form").submit();
                 }
@@ -544,6 +547,7 @@
           </div>
           <textarea name="src_content" id="src" style="width:100%; height:90%; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">{{.Content}}</textarea>
           <input type="hidden" name="id" value="{{.ID}}"/>
+          <input type="hidden" id="pxy" name="pxy" value="{{.Pxy}}"/>
           <input type="hidden" id="html_content" name="html_content" value=""/>
         </form>
       </div>
