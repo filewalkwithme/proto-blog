@@ -184,7 +184,7 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 	v := request.URL.Query()
 	pID := v.Get("id")
 	if len(pID) > 0 {
-		stmt, err := DB.Prepare("select id, title, short_description, src_content, date from posts where id = ?")
+		stmt, err := DB.Prepare("select id, title, short_description, src_content, date from posts where id = ? order by date desc")
 		if err != nil {
 			log.Fatal(err)
 		}
