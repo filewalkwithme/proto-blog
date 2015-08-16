@@ -55,7 +55,7 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	}
 	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Posts: posts}
 
-	bufIndexPage, _ := ioutil.ReadFile("pages/index.html")
+	bufIndexPage, _ := ioutil.ReadFile("skins/bootstrap-blog/index.html")
 	indexPage = string(bufIndexPage)
 
 	t := template.Must(template.New("page").Parse(indexPage))
@@ -115,7 +115,7 @@ func loginPageHandler(response http.ResponseWriter, request *http.Request) {
 	}
 	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription}
 
-	bufPage, _ := ioutil.ReadFile("pages/login.html")
+	bufPage, _ := ioutil.ReadFile("skins/bootstrap-blog/login.html")
 	t := template.Must(template.New("page").Parse(string(bufPage)))
 
 	t.Execute(response, page)
@@ -156,7 +156,7 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 		}
 		var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Title: title, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
-		bufIndexPage, _ := ioutil.ReadFile("pages/post.html")
+		bufIndexPage, _ := ioutil.ReadFile("skins/bootstrap-blog/post.html")
 		indexPage = string(bufIndexPage)
 
 		t := template.Must(template.New("page").Parse(indexPage))
@@ -215,7 +215,7 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 
 	var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content, Pxy: pxy}
 
-	bufIndexPage, _ := ioutil.ReadFile("pages/edit.html")
+	bufIndexPage, _ := ioutil.ReadFile("skins/bootstrap-blog/edit.html")
 	indexPage = string(bufIndexPage)
 
 	t := template.Must(template.New("page").Parse(indexPage))
