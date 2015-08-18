@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>{{.BlogTitle}}</title>
+  </head>
+
+  <body>
+    {{if .AdminLogged}}<a href="/logout">Logout</a>{{end}}
+
+    <h1>{{.BlogTitle}}</h1>
+    <p>{{.BlogDescription}}</p>
+    <hr/>
+
+
+    {{range .Posts}}
+    <h2><a href="/post.html?id={{.ID}}">{{.Title}}</a></h2>
+    <p>{{.Date}} by <a href="#">{{.Author}}</a></p>
+    <p>{{.ShortDescription}}</p>
+    <a href="/post.html?id={{.ID}}">read more...</a>
+    <hr>
+    {{end}}
+
+    {{if .AdminLogged}}<a href="edit.html">New Post</a>{{end}}
+  </body>
+</html>
