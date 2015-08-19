@@ -95,7 +95,9 @@ func main() {
 	router.HandleFunc("/delete", deleteHandler).Methods("GET")
 
 	wd, _ := os.Getwd()
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/assets"))))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/skins/"+theme+"/assets"))))
+
+	http.Handle("/common_assets/", http.StripPrefix("/common_assets/", http.FileServer(http.Dir(wd+"/common_assets"))))
 
 	http.Handle("/", router)
 	http.ListenAndServe(":8080", nil)
