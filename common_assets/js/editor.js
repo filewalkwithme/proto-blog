@@ -462,7 +462,7 @@ $(document).ready(function() {
       }
   });
 
-  var objDiv = document.getElementById("body");
+  var objDiv = document.body;
   objDiv.scrollTop = objDiv.scrollHeight;
   objDiv.scrollTop = 0;
 });
