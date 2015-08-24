@@ -451,7 +451,15 @@ $(document).ready(function() {
             $("#form").submit();
           }
         }
-      ]
+      ],
+      dragStop: function( event, ui ) {
+        var position = $( "#post-editor" ).dialog( "option", "position" );
+        localStorage.setItem("pxy", position.at);
+      },
+      resize: function( event, ui ) {
+        var position = $( "#post-editor" ).dialog( "option", "position" );
+        localStorage.setItem("pxy", position.at);
+      }
   });
 
   var objDiv = document.getElementById("body");
