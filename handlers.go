@@ -86,7 +86,7 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 
-	session.AddFlash("Login/password incorrect!")
+	session.AddFlash("Username/password incorrect!")
 	session.Save(request, response)
 
 	http.Redirect(response, request, "/admin", 302)
