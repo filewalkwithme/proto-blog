@@ -99,7 +99,7 @@ func logoutHandler(response http.ResponseWriter, request *http.Request) {
 	session.Values["admin-logged"] = false
 	session.Save(request, response)
 
-	http.Redirect(response, request, "/", 302)
+	http.Redirect(response, request, "/admin", 302)
 }
 
 // login page

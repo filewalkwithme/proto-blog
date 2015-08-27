@@ -88,7 +88,7 @@ func main() {
 	router.HandleFunc("/", indexPageHandler).Methods("GET")
 	router.HandleFunc("/login", loginHandler).Methods("POST")
 	router.HandleFunc("/logout", logoutHandler).Methods("GET")
-	router.HandleFunc("/login.html", loginPageHandler).Methods("GET")
+	router.HandleFunc("/admin", loginPageHandler).Methods("GET")
 	router.HandleFunc("/post.html", viewPostHandler).Methods("GET")
 	router.HandleFunc("/edit.html", editHandler).Methods("GET")
 	router.HandleFunc("/save", saveHandler).Methods("POST")
