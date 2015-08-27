@@ -86,7 +86,10 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 
-	http.Redirect(response, request, "/login.html", 302)
+	session.AddFlash("Login/password incorrect!")
+	session.Save(request, response)
+
+	http.Redirect(response, request, "/admin", 302)
 }
 
 func logoutHandler(response http.ResponseWriter, request *http.Request) {
@@ -113,8 +116,18 @@ func loginPageHandler(response http.ResponseWriter, request *http.Request) {
 	type Page struct {
 		BlogTitle       string
 		BlogDescription string
+		ShowError       bool
+		Error           string
 	}
-	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription}
+	flash := ""
+
+	flashes := session.Flashes()
+	showError := len(flashes) > 0
+	if showError {
+		flash = flashes[0].(string)
+	}
+	session.Save(request, response)
+	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription, ShowError: showError, Error: flash}
 
 	bufPage, _ := ioutil.ReadFile("skins/" + theme + "/login.html")
 	t := template.Must(template.New("page").Parse(string(bufPage)))

@@ -13,6 +13,9 @@
       <input type="text" name="username" id="inputUsername" required autofocus>
       <label for="inputPassword">Password</label>
       <input type="password" name="password" id="inputPassword" required>
+      {{if .ShowError}}
+      {{.Error}}
+      {{end}}
       <button type="submit">Sign in</button>
     </form>
   </body>
