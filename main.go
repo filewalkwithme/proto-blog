@@ -2,13 +2,12 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	ini "github.com/Unknwon/goconfig"
-	"github.com/gorilla/mux"
+	mux "github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -69,7 +68,7 @@ func init() {
 	DB = db
 
 	if os.IsNotExist(errCheckExists) {
-		fmt.Printf("File blog.db not exists. \nCreating initial database.\n")
+		log.Printf("File blog.db not exists. \nCreating initial database.\n")
 
 		sqlCreateDB := `
 		create table posts (id integer not null primary key, title text, src_content text, html_content text, short_description text, date datetime);
@@ -80,7 +79,7 @@ func init() {
 			log.Printf("%q: %s\n", err, sqlCreateDB)
 			return
 		}
-		fmt.Printf("Initial database created.\n")
+		log.Printf("Initial database created.\n")
 	}
 }
 
@@ -94,7 +93,11 @@ func main() {
 	router.HandleFunc("/save", saveHandler).Methods("POST")
 	router.HandleFunc("/delete", deleteHandler).Methods("GET")
 
-	wd, _ := os.Getwd()
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/skins/"+theme+"/assets"))))
 
 	http.Handle("/common_assets/", http.StripPrefix("/common_assets/", http.FileServer(http.Dir(wd+"/common_assets"))))

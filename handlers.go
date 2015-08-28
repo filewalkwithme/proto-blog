@@ -25,45 +25,6 @@ type Post struct {
 	Date             string
 }
 
-var indexPage string
-
-// index page
-func indexPageHandler(response http.ResponseWriter, request *http.Request) {
-	session, _ := store.Get(request, "blog-session")
-	var posts []Post
-
-	rows, err := DB.Query("select id, html_content, short_description, title, date from posts")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-	for rows.Next() {
-		var id int
-		var htmlContent string
-		var shortDescription string
-		var title string
-		var date time.Time
-		rows.Scan(&id, &htmlContent, &shortDescription, &title, &date)
-		posts = append(posts, Post{ID: id, Title: title, Content: htmlContent, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02")})
-	}
-	rows.Close()
-
-	type Page struct {
-		BlogTitle       string
-		BlogDescription string
-		AdminLogged     bool
-		Posts           []Post
-	}
-	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Posts: posts}
-
-	bufIndexPage, _ := ioutil.ReadFile("skins/" + theme + "/index.html")
-	indexPage = string(bufIndexPage)
-
-	t := template.Must(template.New("page").Parse(indexPage))
-
-	t.Execute(response, page)
-}
-
 func loginHandler(response http.ResponseWriter, request *http.Request) {
 	session, _ := store.Get(request, "blog-session")
 	if session.Values["admin-logged"] == true {
@@ -171,7 +132,7 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 		var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Title: title, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
 		bufIndexPage, _ := ioutil.ReadFile("skins/" + theme + "/post.html")
-		indexPage = string(bufIndexPage)
+		indexPage := string(bufIndexPage)
 
 		t := template.Must(template.New("page").Parse(indexPage))
 
@@ -281,7 +242,7 @@ func editHandler(response http.ResponseWriter, request *http.Request) {
 	var page = Page{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
 
 	bufIndexPage, _ := ioutil.ReadFile("skins/" + theme + "/edit.html")
-	indexPage = string(bufIndexPage)
+	indexPage := string(bufIndexPage)
 	indexPage = strings.Replace(indexPage, "{{.Editor}}", editor, -1)
 
 	t := template.Must(template.New("page").Parse(indexPage))
