@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -25,7 +26,10 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	if err == nil {
 		rows, err := DB.Query("select id, html_content, short_description, title, date from posts order by date desc")
 		if err != nil {
-			log.Fatal(err)
+			response.WriteHeader(http.StatusInternalServerError)
+			log.Printf("%v \n", err)
+			fmt.Fprintf(response, "%v \n", err)
+			return
 		}
 		defer rows.Close()
 
@@ -50,9 +54,15 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 
 			t.Execute(response, page)
 		} else {
+			response.WriteHeader(http.StatusInternalServerError)
 			log.Printf("%v \n", err)
+			fmt.Fprintf(response, "%v \n", err)
+			return
 		}
 	} else {
+		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
+		fmt.Fprintf(response, "%v \n", err)
+		return
 	}
 }
