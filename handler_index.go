@@ -9,17 +9,25 @@ import (
 	"time"
 )
 
-//IndexPage struct represents the index page
-type IndexPage struct {
+type indexPage struct {
 	BlogTitle       string
 	BlogDescription string
 	AdminLogged     bool
-	Posts           []Post
+	Posts           []postEntry
+}
+
+type postEntry struct {
+	ID               int
+	Title            string
+	Content          string
+	ShortDescription string
+	Author           string
+	Date             string
 }
 
 // index page
 func indexPageHandler(response http.ResponseWriter, request *http.Request) {
-	var posts []Post
+	var posts []postEntry
 
 	session, err := store.Get(request, "blog-session")
 
@@ -40,17 +48,17 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 			var title string
 			var date time.Time
 			rows.Scan(&id, &htmlContent, &shortDescription, &title, &date)
-			posts = append(posts, Post{ID: id, Title: title, Content: htmlContent, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02")})
+			posts = append(posts, postEntry{ID: id, Title: title, Content: htmlContent, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02")})
 		}
 		rows.Close()
 
-		var page = IndexPage{BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Posts: posts}
+		var page = indexPage{BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Posts: posts}
 
 		bufIndexPage, err := ioutil.ReadFile("skins/" + theme + "/index.html")
 		if err == nil {
 			indexPage := string(bufIndexPage)
 
-			t := template.Must(template.New("index-page").Parse(indexPage))
+			t := template.Must(template.New("indexPage").Parse(indexPage))
 
 			t.Execute(response, page)
 		} else {

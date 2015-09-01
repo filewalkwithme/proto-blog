@@ -8,6 +8,7 @@ import (
 
 	ini "github.com/Unknwon/goconfig"
 	mux "github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -22,6 +23,8 @@ var authorName string
 var authorUsername string
 var secret string
 var theme string
+
+var store = sessions.NewCookieStore([]byte(secret))
 
 func init() {
 	cfg, err := ini.LoadConfigFile("blog.cfg")
@@ -85,13 +88,13 @@ func init() {
 
 func main() {
 	router.HandleFunc("/", indexPageHandler).Methods("GET")
+	router.HandleFunc("/admin", loginPageHandler).Methods("GET")
 	router.HandleFunc("/login", loginHandler).Methods("POST")
 	router.HandleFunc("/logout", logoutHandler).Methods("GET")
-	router.HandleFunc("/admin", loginPageHandler).Methods("GET")
 	router.HandleFunc("/post.html", viewPostHandler).Methods("GET")
-	router.HandleFunc("/edit.html", editHandler).Methods("GET")
-	router.HandleFunc("/save", saveHandler).Methods("POST")
-	router.HandleFunc("/delete", deleteHandler).Methods("GET")
+	router.HandleFunc("/edit.html", editPostHandler).Methods("GET")
+	router.HandleFunc("/save", savePostHandler).Methods("POST")
+	router.HandleFunc("/delete", deletePostHandler).Methods("GET")
 
 	wd, err := os.Getwd()
 	if err != nil {
