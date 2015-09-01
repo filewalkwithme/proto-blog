@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 	"text/template"
@@ -25,34 +24,6 @@ type Post struct {
 	Date             string
 }
 
-func loginHandler(response http.ResponseWriter, request *http.Request) {
-	session, _ := store.Get(request, "blog-session")
-	if session.Values["admin-logged"] == true {
-		http.Redirect(response, request, "/", 302)
-		return
-	}
-
-	request.ParseForm()
-	pUsername := request.FormValue("username")
-	pPassword := request.FormValue("password")
-
-	envPassword := os.Getenv("blog_password_" + pUsername)
-	if len(envPassword) > 0 {
-		if authorUsername == pUsername && envPassword == pPassword {
-			session, _ := store.Get(request, "blog-session")
-			session.Values["admin-logged"] = true
-			session.Save(request, response)
-			http.Redirect(response, request, "/", 302)
-			return
-		}
-	}
-
-	session.AddFlash("Username/password incorrect!")
-	session.Save(request, response)
-
-	http.Redirect(response, request, "/admin", 302)
-}
-
 func logoutHandler(response http.ResponseWriter, request *http.Request) {
 	session, _ := store.Get(request, "blog-session")
 	if session.Values["admin-logged"] != true {
@@ -64,36 +35,6 @@ func logoutHandler(response http.ResponseWriter, request *http.Request) {
 	session.Save(request, response)
 
 	http.Redirect(response, request, "/admin", 302)
-}
-
-// login page
-func loginPageHandler(response http.ResponseWriter, request *http.Request) {
-	session, _ := store.Get(request, "blog-session")
-	if session.Values["admin-logged"] == true {
-		http.Redirect(response, request, "/", 302)
-		return
-	}
-
-	type Page struct {
-		BlogTitle       string
-		BlogDescription string
-		ShowError       bool
-		Error           string
-	}
-	flash := ""
-
-	flashes := session.Flashes()
-	showError := len(flashes) > 0
-	if showError {
-		flash = flashes[0].(string)
-	}
-	session.Save(request, response)
-	var page = Page{BlogTitle: blogTitle, BlogDescription: blogDescription, ShowError: showError, Error: flash}
-
-	bufPage, _ := ioutil.ReadFile("skins/" + theme + "/login.html")
-	t := template.Must(template.New("page").Parse(string(bufPage)))
-
-	t.Execute(response, page)
 }
 
 // new post page
