@@ -24,19 +24,6 @@ type Post struct {
 	Date             string
 }
 
-func logoutHandler(response http.ResponseWriter, request *http.Request) {
-	session, _ := store.Get(request, "blog-session")
-	if session.Values["admin-logged"] != true {
-		http.Redirect(response, request, "/", 302)
-		return
-	}
-
-	session.Values["admin-logged"] = false
-	session.Save(request, response)
-
-	http.Redirect(response, request, "/admin", 302)
-}
-
 // new post page
 func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 	session, _ := store.Get(request, "blog-session")

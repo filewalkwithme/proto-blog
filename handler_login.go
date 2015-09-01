@@ -74,7 +74,14 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 
 // login page
 func loginPageHandler(response http.ResponseWriter, request *http.Request) {
-	session, _ := store.Get(request, "blog-session")
+	session, err := store.Get(request, "blog-session")
+	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		log.Printf("%v \n", err)
+		fmt.Fprintf(response, "%v \n", err)
+		return
+	}
+
 	if session.Values["admin-logged"] == true {
 		http.Redirect(response, request, "/", 302)
 		return
@@ -87,7 +94,14 @@ func loginPageHandler(response http.ResponseWriter, request *http.Request) {
 	if showError {
 		flash = flashes[0].(string)
 	}
-	session.Save(request, response)
+	err = session.Save(request, response)
+	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		log.Printf("%v \n", err)
+		fmt.Fprintf(response, "%v \n", err)
+		return
+	}
+
 	var page = loginPage{BlogTitle: blogTitle, BlogDescription: blogDescription, ShowError: showError, Error: flash}
 
 	bufPage, err := ioutil.ReadFile("skins/" + theme + "/login.html")
