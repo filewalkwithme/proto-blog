@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 type loginPage struct {
@@ -16,8 +17,14 @@ type loginPage struct {
 	Error           string
 }
 
-//create function to log and handle error messages
+var failedAttempts = 0
+var lastValidAttempt time.Time
+
 func loginHandler(response http.ResponseWriter, request *http.Request) {
+	if failedAttempts >= 5 && time.Since(lastValidAttempt) >= (30*time.Minute) {
+		failedAttempts = 0
+	}
+
 	session, err := store.Get(request, "blog-session")
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -26,41 +33,50 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	if session.Values["admin-logged"] == true {
-		http.Redirect(response, request, "/", 302)
-		return
-	}
+	if failedAttempts < 5 {
+		failedAttempts = failedAttempts + 1
+		lastValidAttempt = time.Now()
 
-	err = request.ParseForm()
-	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		log.Printf("%v \n", err)
-		fmt.Fprintf(response, "%v \n", err)
-		return
-	}
-
-	pUsername := request.FormValue("username")
-	pPassword := request.FormValue("password")
-
-	envPassword := os.Getenv("blog_password_" + pUsername)
-	if len(envPassword) > 0 {
-		if authorUsername == pUsername && envPassword == pPassword {
-			session.Values["admin-logged"] = true
-
-			err = session.Save(request, response)
-			if err != nil {
-				response.WriteHeader(http.StatusInternalServerError)
-				log.Printf("%v \n", err)
-				fmt.Fprintf(response, "%v \n", err)
-				return
-			}
-
+		if session.Values["admin-logged"] == true {
 			http.Redirect(response, request, "/", 302)
 			return
 		}
+
+		err = request.ParseForm()
+		if err != nil {
+			response.WriteHeader(http.StatusInternalServerError)
+			log.Printf("%v \n", err)
+			fmt.Fprintf(response, "%v \n", err)
+			return
+		}
+
+		pUsername := request.FormValue("username")
+		pPassword := request.FormValue("password")
+
+		envPassword := os.Getenv("blog_password_" + pUsername)
+		if len(envPassword) > 0 {
+			if authorUsername == pUsername && envPassword == pPassword {
+				session.Values["admin-logged"] = true
+				failedAttempts = 0
+
+				err = session.Save(request, response)
+				if err != nil {
+					response.WriteHeader(http.StatusInternalServerError)
+					log.Printf("%v \n", err)
+					fmt.Fprintf(response, "%v \n", err)
+					return
+				}
+
+				http.Redirect(response, request, "/", 302)
+				return
+			}
+		}
+
+		session.AddFlash("Username/password incorrect!")
+	} else {
+		session.AddFlash("Password retry limit exceeded! Wait 30 minutes to try again.")
 	}
 
-	session.AddFlash("Username/password incorrect!")
 	err = session.Save(request, response)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
