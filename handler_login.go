@@ -25,7 +25,7 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 		failedAttempts = 0
 	}
 
-	session, err := store.Get(request, "blog-session")
+	session, err := store.Get(request, sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -90,7 +90,7 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 
 // login page
 func loginPageHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, "blog-session")
+	session, err := store.Get(request, sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)

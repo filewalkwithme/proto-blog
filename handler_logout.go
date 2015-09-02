@@ -7,7 +7,7 @@ import (
 )
 
 func logoutHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, "blog-session")
+	session, err := store.Get(request, sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)

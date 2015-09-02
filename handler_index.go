@@ -29,7 +29,7 @@ type postEntry struct {
 func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	var posts []postEntry
 
-	session, err := store.Get(request, "blog-session")
+	session, err := store.Get(request, sessionName)
 
 	if err == nil {
 		rows, err := DB.Query("select id, html_content, short_description, title, date from posts order by date desc")

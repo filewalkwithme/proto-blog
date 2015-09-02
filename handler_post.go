@@ -24,7 +24,7 @@ type postPage struct {
 }
 
 func viewPostHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, "blog-session")
+	session, err := store.Get(request, sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -78,7 +78,7 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 func editPostHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, "blog-session")
+	session, err := store.Get(request, sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -135,7 +135,7 @@ func editPostHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 func savePostHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, "blog-session")
+	session, err := store.Get(request, sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -225,13 +225,13 @@ func savePostHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 func deletePostHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, "blog-session")
-  if err != nil {
-    response.WriteHeader(http.StatusInternalServerError)
-    log.Printf("%v \n", err)
-    fmt.Fprintf(response, "%v \n", err)
-    return
-  }
+	session, err := store.Get(request, sessionName)
+	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		log.Printf("%v \n", err)
+		fmt.Fprintf(response, "%v \n", err)
+		return
+	}
 
 	if session.Values["admin-logged"] != true {
 		http.Redirect(response, request, "/", 302)
@@ -242,30 +242,30 @@ func deletePostHandler(response http.ResponseWriter, request *http.Request) {
 	pID := v.Get("id")
 
 	tx, err := DB.Begin()
-  if err != nil {
-    response.WriteHeader(http.StatusInternalServerError)
-    log.Printf("%v \n", err)
-    fmt.Fprintf(response, "%v \n", err)
-    return
-  }
+	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		log.Printf("%v \n", err)
+		fmt.Fprintf(response, "%v \n", err)
+		return
+	}
 
 	stmt, err := tx.Prepare("delete from posts where id=?")
-  if err != nil {
-    response.WriteHeader(http.StatusInternalServerError)
-    log.Printf("%v \n", err)
-    fmt.Fprintf(response, "%v \n", err)
-    return
-  }
+	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		log.Printf("%v \n", err)
+		fmt.Fprintf(response, "%v \n", err)
+		return
+	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(pID)
-  if err != nil {
-    response.WriteHeader(http.StatusInternalServerError)
-    log.Printf("%v \n", err)
-    fmt.Fprintf(response, "%v \n", err)
-    return
-  }
+	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		log.Printf("%v \n", err)
+		fmt.Fprintf(response, "%v \n", err)
+		return
+	}
 	tx.Commit()
-  
+
 	http.Redirect(response, request, "/", 302)
 }

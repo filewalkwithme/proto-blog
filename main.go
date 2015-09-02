@@ -22,6 +22,7 @@ var blogDescription string
 var authorName string
 var authorUsername string
 var secret string
+var sessionName string
 var theme string
 
 var store = sessions.NewCookieStore([]byte(secret))
@@ -53,6 +54,11 @@ func init() {
 	}
 
 	secret, err = cfg.GetValue("blog", "secret")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	sessionName, err = cfg.GetValue("blog", "session-name")
 	if err != nil {
 		log.Fatal(err)
 	}
