@@ -23,8 +23,8 @@ type postPage struct {
 	Content          string
 }
 
-func viewPostHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, sessionName)
+func (b *blog) viewPostHandler(response http.ResponseWriter, request *http.Request) {
+	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -41,7 +41,7 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 	v := request.URL.Query()
 	pID := v.Get("id")
 	if len(pID) > 0 {
-		stmt, err := DB.Prepare("select id, title, short_description, html_content, date from posts where id = ?")
+		stmt, err := b.DB.Prepare("select id, title, short_description, html_content, date from posts where id = ?")
 		if err != nil {
 			response.WriteHeader(http.StatusInternalServerError)
 			log.Printf("%v \n", err)
@@ -57,9 +57,18 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 
-		var page = postPage{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Title: title, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
+		var page = postPage{
+			ID:               id,
+			BlogTitle:        b.blogTitle,
+			BlogDescription:  b.blogDescription,
+			AdminLogged:      session.Values["admin-logged"] == true,
+			Title:            title,
+			ShortDescription: shortDescription,
+			Author:           b.authorName,
+			Date:             date.Format("2006-01-02"),
+			Content:          content}
 
-		bufIndexPage, err := ioutil.ReadFile("skins/" + theme + "/post.html")
+		bufIndexPage, err := ioutil.ReadFile("skins/" + b.theme + "/post.html")
 		if err != nil {
 			response.WriteHeader(http.StatusInternalServerError)
 			log.Printf("%v \n", err)
@@ -77,8 +86,8 @@ func viewPostHandler(response http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func editPostHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, sessionName)
+func (b *blog) editPostHandler(response http.ResponseWriter, request *http.Request) {
+	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -100,7 +109,7 @@ func editPostHandler(response http.ResponseWriter, request *http.Request) {
 	v := request.URL.Query()
 	pID := v.Get("id")
 	if len(pID) > 0 {
-		stmt, err := DB.Prepare("select id, title, short_description, src_content, date from posts where id = ? order by date desc")
+		stmt, err := b.DB.Prepare("select id, title, short_description, src_content, date from posts where id = ? order by date desc")
 		if err != nil {
 			response.WriteHeader(http.StatusInternalServerError)
 			log.Printf("%v \n", err)
@@ -117,9 +126,18 @@ func editPostHandler(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 
-	var page = postPage{ID: id, BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, ShortDescription: shortDescription, Title: title, Author: authorName, Date: date.Format("2006-01-02"), Content: content}
+	var page = postPage{
+		ID:               id,
+		BlogTitle:        b.blogTitle,
+		BlogDescription:  b.blogDescription,
+		AdminLogged:      session.Values["admin-logged"] == true,
+		ShortDescription: shortDescription,
+		Title:            title,
+		Author:           b.authorName,
+		Date:             date.Format("2006-01-02"),
+		Content:          content}
 
-	bufIndexPage, err := ioutil.ReadFile("skins/" + theme + "/edit.html")
+	bufIndexPage, err := ioutil.ReadFile("skins/" + b.theme + "/edit.html")
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -134,8 +152,8 @@ func editPostHandler(response http.ResponseWriter, request *http.Request) {
 	t.Execute(response, page)
 }
 
-func savePostHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, sessionName)
+func (b *blog) savePostHandler(response http.ResponseWriter, request *http.Request) {
+	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -157,7 +175,7 @@ func savePostHandler(response http.ResponseWriter, request *http.Request) {
 	pDate := time.Now()
 
 	if pID == "-1" {
-		tx, err := DB.Begin()
+		tx, err := b.DB.Begin()
 		if err != nil {
 			response.WriteHeader(http.StatusInternalServerError)
 			log.Printf("%v \n", err)
@@ -194,7 +212,7 @@ func savePostHandler(response http.ResponseWriter, request *http.Request) {
 		tx.Commit()
 	} else {
 
-		tx, err := DB.Begin()
+		tx, err := b.DB.Begin()
 		if err != nil {
 			response.WriteHeader(http.StatusInternalServerError)
 			log.Printf("%v \n", err)
@@ -224,8 +242,8 @@ func savePostHandler(response http.ResponseWriter, request *http.Request) {
 	http.Redirect(response, request, "/edit.html?id="+pID, 302)
 }
 
-func deletePostHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, sessionName)
+func (b *blog) deletePostHandler(response http.ResponseWriter, request *http.Request) {
+	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -241,7 +259,7 @@ func deletePostHandler(response http.ResponseWriter, request *http.Request) {
 	v := request.URL.Query()
 	pID := v.Get("id")
 
-	tx, err := DB.Begin()
+	tx, err := b.DB.Begin()
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)

@@ -20,12 +20,12 @@ type loginPage struct {
 var failedAttempts = 0
 var lastValidAttempt time.Time
 
-func loginHandler(response http.ResponseWriter, request *http.Request) {
+func (b *blog) loginHandler(response http.ResponseWriter, request *http.Request) {
 	if failedAttempts >= 5 && time.Since(lastValidAttempt) >= (30*time.Minute) {
 		failedAttempts = 0
 	}
 
-	session, err := store.Get(request, sessionName)
+	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -55,7 +55,7 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 
 		envPassword := os.Getenv("blog_password_" + pUsername)
 		if len(envPassword) > 0 {
-			if authorUsername == pUsername && envPassword == pPassword {
+			if b.authorUsername == pUsername && envPassword == pPassword {
 				session.Values["admin-logged"] = true
 				failedAttempts = 0
 
@@ -89,8 +89,8 @@ func loginHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 // login page
-func loginPageHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, sessionName)
+func (b *blog) loginPageHandler(response http.ResponseWriter, request *http.Request) {
+	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)
@@ -118,9 +118,13 @@ func loginPageHandler(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	var page = loginPage{BlogTitle: blogTitle, BlogDescription: blogDescription, ShowError: showError, Error: flash}
+	var page = loginPage{
+		BlogTitle:       b.blogTitle,
+		BlogDescription: b.blogDescription,
+		ShowError:       showError,
+		Error:           flash}
 
-	bufPage, err := ioutil.ReadFile("skins/" + theme + "/login.html")
+	bufPage, err := ioutil.ReadFile("skins/" + b.theme + "/login.html")
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)

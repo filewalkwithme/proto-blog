@@ -6,8 +6,8 @@ import (
 	"net/http"
 )
 
-func logoutHandler(response http.ResponseWriter, request *http.Request) {
-	session, err := store.Get(request, sessionName)
+func (b *blog) logoutHandler(response http.ResponseWriter, request *http.Request) {
+	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v \n", err)

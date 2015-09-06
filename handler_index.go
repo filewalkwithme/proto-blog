@@ -26,13 +26,13 @@ type postEntry struct {
 }
 
 // index page
-func indexPageHandler(response http.ResponseWriter, request *http.Request) {
+func (b *blog) indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	var posts []postEntry
 
-	session, err := store.Get(request, sessionName)
+	session, err := b.store.Get(request, b.sessionName)
 
 	if err == nil {
-		rows, err := DB.Query("select id, html_content, short_description, title, date from posts order by date desc")
+		rows, err := b.DB.Query("select id, html_content, short_description, title, date from posts order by date desc")
 		if err != nil {
 			response.WriteHeader(http.StatusInternalServerError)
 			log.Printf("%v \n", err)
@@ -48,13 +48,22 @@ func indexPageHandler(response http.ResponseWriter, request *http.Request) {
 			var title string
 			var date time.Time
 			rows.Scan(&id, &htmlContent, &shortDescription, &title, &date)
-			posts = append(posts, postEntry{ID: id, Title: title, Content: htmlContent, ShortDescription: shortDescription, Author: authorName, Date: date.Format("2006-01-02")})
+			posts = append(posts, postEntry{ID: id,
+				Title:            title,
+				Content:          htmlContent,
+				ShortDescription: shortDescription,
+				Author:           b.authorName,
+				Date:             date.Format("2006-01-02")})
 		}
 		rows.Close()
 
-		var page = indexPage{BlogTitle: blogTitle, BlogDescription: blogDescription, AdminLogged: session.Values["admin-logged"] == true, Posts: posts}
+		var page = indexPage{
+			BlogTitle:       b.blogTitle,
+			BlogDescription: b.blogDescription,
+			AdminLogged:     session.Values["admin-logged"] == true,
+			Posts:           posts}
 
-		bufIndexPage, err := ioutil.ReadFile("skins/" + theme + "/index.html")
+		bufIndexPage, err := ioutil.ReadFile("skins/" + b.theme + "/index.html")
 		if err == nil {
 			indexPage := string(bufIndexPage)
 

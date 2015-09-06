@@ -12,58 +12,60 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var router = mux.NewRouter()
+var wd string
 
-//DB is the global DB object
-var DB *sql.DB
-var cfg *ini.ConfigFile
-var blogTitle string
-var blogDescription string
-var authorName string
-var authorUsername string
-var secret string
-var sessionName string
-var theme string
+type blog struct {
+	DB              *sql.DB
+	cfg             *ini.ConfigFile
+	blogTitle       string
+	blogDescription string
+	authorName      string
+	authorUsername  string
+	secret          string
+	sessionName     string
+	theme           string
 
-var store = sessions.NewCookieStore([]byte(secret))
+	store  *sessions.CookieStore
+	router *mux.Router
+}
 
-func init() {
+func (b *blog) init() {
 	cfg, err := ini.LoadConfigFile("blog.cfg")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	authorName, err = cfg.GetValue("author", "name")
+	b.authorName, err = cfg.GetValue("author", "name")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	authorUsername, err = cfg.GetValue("author", "username")
+	b.authorUsername, err = cfg.GetValue("author", "username")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	blogTitle, err = cfg.GetValue("blog", "title")
+	b.blogTitle, err = cfg.GetValue("blog", "title")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	blogDescription, err = cfg.GetValue("blog", "description")
+	b.blogDescription, err = cfg.GetValue("blog", "description")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	secret, err = cfg.GetValue("blog", "secret")
+	b.secret, err = cfg.GetValue("blog", "secret")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	sessionName, err = cfg.GetValue("blog", "session-name")
+	b.sessionName, err = cfg.GetValue("blog", "session-name")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	theme, err = cfg.GetValue("blog", "theme")
+	b.theme, err = cfg.GetValue("blog", "theme")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -74,7 +76,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	DB = db
+	b.DB = db
 
 	if os.IsNotExist(errCheckExists) {
 		log.Printf("File blog.db not exists. \nCreating initial database.\n")
@@ -90,27 +92,35 @@ func init() {
 		}
 		log.Printf("Initial database created.\n")
 	}
-}
 
-func main() {
-	router.HandleFunc("/", indexPageHandler).Methods("GET")
-	router.HandleFunc("/admin", loginPageHandler).Methods("GET")
-	router.HandleFunc("/login", loginHandler).Methods("POST")
-	router.HandleFunc("/logout", logoutHandler).Methods("GET")
-	router.HandleFunc("/post.html", viewPostHandler).Methods("GET")
-	router.HandleFunc("/edit.html", editPostHandler).Methods("GET")
-	router.HandleFunc("/save", savePostHandler).Methods("POST")
-	router.HandleFunc("/delete", deletePostHandler).Methods("GET")
+	b.router = mux.NewRouter()
+	b.store = sessions.NewCookieStore([]byte(b.secret))
 
-	wd, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
+	b.router.HandleFunc("/", b.indexPageHandler).Methods("GET")
+	b.router.HandleFunc("/admin", b.loginPageHandler).Methods("GET")
+	b.router.HandleFunc("/login", b.loginHandler).Methods("POST")
+	b.router.HandleFunc("/logout", b.logoutHandler).Methods("GET")
+	b.router.HandleFunc("/post.html", b.viewPostHandler).Methods("GET")
+	b.router.HandleFunc("/edit.html", b.editPostHandler).Methods("GET")
+	b.router.HandleFunc("/save", b.savePostHandler).Methods("POST")
+	b.router.HandleFunc("/delete", b.deletePostHandler).Methods("GET")
 
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/skins/"+theme+"/assets"))))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/skins/"+b.theme+"/assets"))))
 
 	http.Handle("/common_assets/", http.StripPrefix("/common_assets/", http.FileServer(http.Dir(wd+"/common_assets"))))
 
-	http.Handle("/", router)
+	http.Handle("/", b.router)
+
 	http.ListenAndServe(":8080", nil)
+}
+
+func main() {
+	workingDir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	wd = workingDir
+
+	b := &blog{}
+	b.init()
 }
