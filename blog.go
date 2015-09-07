@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -59,8 +60,18 @@ func (b *blog) load(configFile string) {
 		log.Fatal(err)
 	}
 
+	if b.secret == "something-very-secret" {
+		err := fmt.Errorf("Please, change the parameter 'secret' value to something different than it's default value (something-very-secret)")
+		log.Fatal(err)
+	}
+
 	b.sessionName, err = cfg.GetValue("blog", "session-name")
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	if b.sessionName == "blog-session" {
+		err := fmt.Errorf("Please, change the parameter 'session-name' value to something different than it's default value (blog-session)")
 		log.Fatal(err)
 	}
 
