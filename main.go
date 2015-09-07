@@ -24,6 +24,7 @@ type blog struct {
 	secret          string
 	sessionName     string
 	theme           string
+	port            string
 
 	store  *sessions.CookieStore
 	router *mux.Router
@@ -70,6 +71,11 @@ func (b *blog) init() {
 		log.Fatal(err)
 	}
 
+	b.port, err = cfg.GetValue("blog", "port")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	_, errCheckExists := os.Stat("./blog.db")
 
 	db, err := sql.Open("sqlite3", "./blog.db")
@@ -111,7 +117,7 @@ func (b *blog) init() {
 
 	http.Handle("/", b.router)
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":"+b.port, nil)
 }
 
 func main() {
