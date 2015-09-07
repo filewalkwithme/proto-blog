@@ -20,4 +20,6 @@ func init() {
 func main() {
 	b := &blog{}
 	b.load("blog.cfg")
+	b.start()
+
 }
