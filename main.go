@@ -15,16 +15,17 @@ import (
 var wd string
 
 type blog struct {
-	DB              *sql.DB
-	cfg             *ini.ConfigFile
-	blogTitle       string
-	blogDescription string
-	authorName      string
-	authorUsername  string
-	secret          string
-	sessionName     string
-	theme           string
-	port            string
+	DB               *sql.DB
+	cfg              *ini.ConfigFile
+	blogTitle        string
+	blogDescription  string
+	authorName       string
+	authorUsername   string
+	secret           string
+	sessionName      string
+	theme            string
+	port             string
+	databaseFilename string
 
 	store  *sessions.CookieStore
 	router *mux.Router
@@ -76,9 +77,14 @@ func (b *blog) load(configFile string) {
 		log.Fatal(err)
 	}
 
-	_, errCheckExists := os.Stat("./blog.db")
+	b.databaseFilename, err = cfg.GetValue("blog", "database-filename")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	db, err := sql.Open("sqlite3", "./blog.db")
+	_, errCheckExists := os.Stat("./" + b.databaseFilename)
+
+	db, err := sql.Open("sqlite3", "./"+b.databaseFilename)
 	if err != nil {
 		log.Fatal(err)
 	}
