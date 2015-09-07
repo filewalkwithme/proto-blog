@@ -18,8 +18,7 @@ func init() {
 }
 
 func main() {
-	b := &blog{}
-	b.load("blog.cfg")
+	var b blog
+	b.loadConfig("blog.cfg")
 	b.start()
-
 }

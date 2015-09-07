@@ -29,7 +29,7 @@ type blog struct {
 	router *mux.Router
 }
 
-func (b *blog) load(configFile string) {
+func (b *blog) loadConfig(configFile string) {
 	cfg, err := ini.LoadConfigFile(configFile)
 	if err != nil {
 		log.Fatal(err)
@@ -112,7 +112,9 @@ func (b *blog) load(configFile string) {
 		}
 		log.Printf("Initial database created.\n")
 	}
+}
 
+func (b *blog) start() {
 	b.router = mux.NewRouter()
 	b.store = sessions.NewCookieStore([]byte(b.secret))
 
