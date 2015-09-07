@@ -111,13 +111,10 @@ func (b *blog) load(configFile string) {
 	b.router.HandleFunc("/save", b.savePostHandler).Methods("POST")
 	b.router.HandleFunc("/delete", b.deletePostHandler).Methods("GET")
 
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/skins/"+b.theme+"/assets"))))
+	b.router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/skins/"+b.theme+"/assets"))))
+	b.router.PathPrefix("/common_assets/").Handler(http.StripPrefix("/common_assets/", http.FileServer(http.Dir(wd+"/common_assets"))))
 
-	http.Handle("/common_assets/", http.StripPrefix("/common_assets/", http.FileServer(http.Dir(wd+"/common_assets"))))
-
-	http.Handle("/", b.router)
-
-	http.ListenAndServe(":"+b.port, nil)
+	http.ListenAndServe(":"+b.port, b.router)
 }
 
 func main() {
