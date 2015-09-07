@@ -30,8 +30,8 @@ type blog struct {
 	router *mux.Router
 }
 
-func (b *blog) init() {
-	cfg, err := ini.LoadConfigFile("blog.cfg")
+func (b *blog) load(configFile string) {
+	cfg, err := ini.LoadConfigFile(configFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -128,5 +128,5 @@ func main() {
 	wd = workingDir
 
 	b := &blog{}
-	b.init()
+	b.load("blog.cfg")
 }
