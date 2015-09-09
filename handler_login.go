@@ -66,7 +66,6 @@ func (b *blog) loginHandler(response http.ResponseWriter, request *http.Request)
 					fmt.Fprintf(response, "%v \n", err)
 					return
 				}
-
 				http.Redirect(response, request, "/", 302)
 				return
 			}
@@ -85,7 +84,7 @@ func (b *blog) loginHandler(response http.ResponseWriter, request *http.Request)
 		return
 	}
 
-	http.Redirect(response, request, "/admin", 302)
+	http.Redirect(response, request, "/admin", 401)
 }
 
 // login page
