@@ -16,7 +16,7 @@ func (b *blog) logoutHandler(response http.ResponseWriter, request *http.Request
 	}
 
 	if session.Values["admin-logged"] != true {
-		http.Redirect(response, request, "/", 302)
+		http.Redirect(response, request, "/", 401)
 		return
 	}
 

@@ -96,7 +96,7 @@ func (b *blog) editPostHandler(response http.ResponseWriter, request *http.Reque
 	}
 
 	if session.Values["admin-logged"] != true {
-		http.Redirect(response, request, "/", 302)
+		http.Redirect(response, request, "/", 401)
 		return
 	}
 
@@ -162,7 +162,7 @@ func (b *blog) savePostHandler(response http.ResponseWriter, request *http.Reque
 	}
 
 	if session.Values["admin-logged"] != true {
-		http.Redirect(response, request, "/", 302)
+		http.Redirect(response, request, "/", 401)
 		return
 	}
 
@@ -252,7 +252,7 @@ func (b *blog) deletePostHandler(response http.ResponseWriter, request *http.Req
 	}
 
 	if session.Values["admin-logged"] != true {
-		http.Redirect(response, request, "/", 302)
+		http.Redirect(response, request, "/", 401)
 		return
 	}
 
