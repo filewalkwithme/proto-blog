@@ -126,6 +126,7 @@ func (b *blog) start() {
 	b.router.HandleFunc("/edit.html", b.editPostHandler).Methods("GET")
 	b.router.HandleFunc("/save", b.savePostHandler).Methods("POST")
 	b.router.HandleFunc("/delete", b.deletePostHandler).Methods("GET")
+	b.router.HandleFunc("/{custom}", b.customHandler).Methods("GET")
 
 	b.router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir(wd+"/skins/"+b.theme+"/assets"))))
 	b.router.PathPrefix("/common_assets/").Handler(http.StripPrefix("/common_assets/", http.FileServer(http.Dir(wd+"/common_assets"))))
