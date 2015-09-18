@@ -23,8 +23,8 @@ func TestLoginHandlerSuccess(t *testing.T) {
 		t.Fatalf("%v\n", err)
 	}
 
-	if resp.StatusCode != 200 {
-		t.Fatalf("wrong StatusCode: %v (expected: 200)\n", resp.StatusCode)
+	if resp.Request.URL.Path != "/" {
+		t.Fatalf("wrong path returned: %v (expected: /)\n", resp.Request.URL.Path)
 	}
 }
 
@@ -44,8 +44,8 @@ func TestLoginHandlerFail(t *testing.T) {
 		t.Fatalf("%v\n", err)
 	}
 
-	if resp.StatusCode != 401 {
-		t.Fatalf("wrong StatusCode: %v (expected: 401)\n", resp.StatusCode)
+	if resp.Request.URL.Path != "/admin" {
+		t.Fatalf("wrong path returned: %v (expected: /admin)\n", resp.Request.URL.Path)
 	}
 }
 
