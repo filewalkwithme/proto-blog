@@ -9,7 +9,8 @@ import (
 func TestCustomHandler(t *testing.T) {
 	var b blog
 	b.loadConfig("blog.cfg")
-	b.port = "8081"
+	b.theme = "minimal"
+	b.port = "8088"
 	go b.start()
 
 	resp, err := http.Get("http://localhost:" + b.port + "/about.html")

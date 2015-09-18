@@ -15,6 +15,13 @@ func (b *blog) customHandler(response http.ResponseWriter, request *http.Request
 	vars := mux.Vars(request)
 	custom := vars["custom"]
 
+	if custom == "login.html" || custom == "edit.html" || custom == "index.html" || custom == "login.html" || custom == "post.html" {
+		response.WriteHeader(http.StatusNotFound)
+		log.Printf("%v \n", errors.New("Not found"))
+		fmt.Fprintf(response, "%v \n", errors.New("Not found"))
+		return
+	}
+
 	bufIndexPage, err := ioutil.ReadFile("skins/" + b.theme + "/" + custom)
 	if err == nil {
 		indexPage := string(bufIndexPage)
