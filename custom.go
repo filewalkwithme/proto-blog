@@ -11,6 +11,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type customPage struct {
+	BlogTitle       string
+	BlogDescription string
+	Author          string
+}
+
 func (b *blog) customHandler(response http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 	custom := vars["custom"]
@@ -22,13 +28,18 @@ func (b *blog) customHandler(response http.ResponseWriter, request *http.Request
 		return
 	}
 
-	bufIndexPage, err := ioutil.ReadFile("skins/" + b.theme + "/" + custom)
+	bufCustomPage, err := ioutil.ReadFile("skins/" + b.theme + "/" + custom)
 	if err == nil {
-		indexPage := string(bufIndexPage)
+		var page = customPage{
+			BlogTitle:       b.blogTitle,
+			BlogDescription: b.blogDescription,
+			Author:          b.authorName}
 
-		t := template.Must(template.New("indexPage").Parse(indexPage))
+		customPage := string(bufCustomPage)
 
-		t.Execute(response, nil)
+		t := template.Must(template.New("customPage").Parse(customPage))
+
+		t.Execute(response, page)
 	} else {
 		response.WriteHeader(http.StatusNotFound)
 		log.Printf("%v \n", errors.New("Not found"))
