@@ -11,6 +11,7 @@ func TestLoginHandlerSuccess(t *testing.T) {
 	var b blog
 	b.loadConfig("blog.cfg")
 	b.port = "8082"
+	b.theme = "minimal"
 	b.authorUsername = "johndoe_1"
 	go b.start()
 
@@ -32,6 +33,7 @@ func TestLoginHandlerFail(t *testing.T) {
 	var b blog
 	b.loadConfig("blog.cfg")
 	b.port = "8083"
+	b.theme = "minimal"
 	b.authorUsername = "johndoe_2"
 	go b.start()
 

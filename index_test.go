@@ -8,6 +8,7 @@ import (
 func TestIndexPageHandler(t *testing.T) {
 	var b blog
 	b.loadConfig("blog.cfg")
+	b.theme = "minimal"
 	b.port = "8081"
 	go b.start()
 
