@@ -52,6 +52,7 @@ func TestLoginHandlerFail(t *testing.T) {
 func TestLoginPageHandler(t *testing.T) {
 	var b blog
 	b.loadConfig("blog.cfg")
+	b.theme = "minimal"
 	b.port = "8084"
 	go b.start()
 

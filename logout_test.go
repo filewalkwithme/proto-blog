@@ -11,6 +11,7 @@ import (
 func TestLogoutHandler(t *testing.T) {
 	var b blog
 	b.loadConfig("blog.cfg")
+	b.theme = "minimal"
 	b.port = "8085"
 	b.authorUsername = "johndoe_1"
 	go b.start()
@@ -35,7 +36,7 @@ func TestLogoutHandler(t *testing.T) {
 		t.Fatalf("wrong StatusCode: %v (expected: 200)\n", resp.StatusCode)
 	}
 
-	resp, err = client.Get("http://localhost:" + b.port + "/logout")
+	resp, err = client.Post("http://localhost:"+b.port+"/logout", "application/text", nil)
 	if err != nil {
 		t.Fatalf("%v\n", err)
 	}

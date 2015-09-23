@@ -121,7 +121,7 @@ func (b *blog) start() {
 	b.router.HandleFunc("/", b.indexPageHandler).Methods("GET")
 	b.router.HandleFunc("/admin", b.loginPageHandler).Methods("GET")
 	b.router.HandleFunc("/login", b.loginHandler).Methods("POST")
-	b.router.HandleFunc("/logout", b.logoutHandler).Methods("GET")
+	b.router.HandleFunc("/logout", b.logoutHandler).Methods("POST")
 	b.router.HandleFunc("/post.html", b.viewPostHandler).Methods("GET")
 	b.router.HandleFunc("/edit.html", b.editPostHandler).Methods("GET")
 	b.router.HandleFunc("/save", b.savePostHandler).Methods("POST")
