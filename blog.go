@@ -41,6 +41,11 @@ func (b *blog) loadConfig(configFile string) {
 		log.Fatal(err)
 	}
 
+	b.authorEmail, err = cfg.GetValue("author", "email")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	b.authorUsername, err = cfg.GetValue("author", "username")
 	if err != nil {
 		log.Fatal(err)
