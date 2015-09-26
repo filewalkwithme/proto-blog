@@ -12,6 +12,8 @@ import (
 type indexPage struct {
 	BlogTitle       string
 	BlogDescription string
+	Author          string
+	Email           string
 	AdminLogged     bool
 	Posts           []postEntry
 }
@@ -22,6 +24,7 @@ type postEntry struct {
 	Content          string
 	ShortDescription string
 	Author           string
+	Email            string
 	Date             string
 }
 
@@ -53,6 +56,7 @@ func (b *blog) indexPageHandler(response http.ResponseWriter, request *http.Requ
 				Content:          htmlContent,
 				ShortDescription: shortDescription,
 				Author:           b.authorName,
+				Email:            b.authorEmail,
 				Date:             date.Format("2006-01-02")})
 		}
 		rows.Close()
@@ -60,6 +64,8 @@ func (b *blog) indexPageHandler(response http.ResponseWriter, request *http.Requ
 		var page = indexPage{
 			BlogTitle:       b.blogTitle,
 			BlogDescription: b.blogDescription,
+			Author:          b.authorName,
+			Email:           b.authorEmail,
 			AdminLogged:     session.Values["admin-logged"] == true,
 			Posts:           posts}
 

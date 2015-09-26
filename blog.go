@@ -18,6 +18,7 @@ type blog struct {
 	blogTitle        string
 	blogDescription  string
 	authorName       string
+	authorEmail      string
 	authorUsername   string
 	secret           string
 	sessionName      string

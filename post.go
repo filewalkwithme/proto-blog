@@ -19,6 +19,7 @@ type postPage struct {
 	Title            string
 	ShortDescription string
 	Author           string
+	Email            string
 	Date             string
 	Content          string
 }
@@ -65,6 +66,7 @@ func (b *blog) viewPostHandler(response http.ResponseWriter, request *http.Reque
 			Title:            title,
 			ShortDescription: shortDescription,
 			Author:           b.authorName,
+			Email:            b.authorEmail,
 			Date:             date.Format("2006-01-02"),
 			Content:          content}
 
@@ -134,6 +136,7 @@ func (b *blog) editPostHandler(response http.ResponseWriter, request *http.Reque
 		ShortDescription: shortDescription,
 		Title:            title,
 		Author:           b.authorName,
+		Email:            b.authorEmail,
 		Date:             date.Format("2006-01-02"),
 		Content:          content}
 

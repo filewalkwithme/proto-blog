@@ -15,6 +15,7 @@ type customPage struct {
 	BlogTitle       string
 	BlogDescription string
 	Author          string
+	Email           string
 }
 
 func (b *blog) customHandler(response http.ResponseWriter, request *http.Request) {
@@ -33,7 +34,8 @@ func (b *blog) customHandler(response http.ResponseWriter, request *http.Request
 		var page = customPage{
 			BlogTitle:       b.blogTitle,
 			BlogDescription: b.blogDescription,
-			Author:          b.authorName}
+			Author:          b.authorName,
+			Email:           b.authorEmail}
 
 		customPage := string(bufCustomPage)
 
