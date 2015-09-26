@@ -53,7 +53,7 @@
           {{range .Posts}}
           <div class="blog-post">
             <h2 class="blog-post-title"><a href="/post.html?id={{.ID}}">{{.Title}}</a></h2>
-            <p class="blog-post-meta">{{.Date}} by <a href="#">{{.Author}}</a></p>
+            <p class="blog-post-meta">{{.Date}} by <a href="mailto:{{.Email}}">{{.Author}}</a></p>
 
             <p style="font-style: italic">{{.ShortDescription}}</p>
             <a href="/post.html?id={{.ID}}">read more...</a>
