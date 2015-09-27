@@ -14,7 +14,9 @@ function update(){
 }
 
 var lastSelectionEnd = 0
-$(document).ready(function() {
+
+
+$(function() {
   $("#btnMD_H1").on('click', function() {
     var caretPos = document.getElementById("src").selectionEnd;
     var textAreaTxt = jQuery("#src").val();
