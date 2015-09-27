@@ -28,10 +28,11 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    <script src="common_assets/js/editor.js"></script>
 </head>
 
 <body>
+    {{.Editor}}
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -62,6 +63,7 @@
                     <li>
                         <a href="contact.html">Contact</a>
                     </li>
+                    {{if .AdminLogged}}<li><a class="blog-nav-item" href="/logout">Logout</a></li>{{end}}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -76,9 +78,9 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>{{.Title}}</h1>
-                        <h2 class="subheading">{{.ShortDescription}}</h2>
-                        <span class="meta">Posted by <a href="#">{{.Author}}</a> {{.Date}}</span>
+                        <h1 id="title">title</h1>
+                        <h2 class="subheading" id="short_description">short description</h2>
+                        <span class="meta">Posted by <a href="mailto:{{.Email}}">{{.Author}}</a> {{.Date}}</span>
                     </div>
                 </div>
             </div>
@@ -90,16 +92,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  {{.Content}}
+                  <div id="target">output</div>
                 </div>
             </div>
         </div>
-        <!-- Pager -->
-        <ul class="pager">
-          <li><a href="/">Home</a></li>
-          {{if .AdminLogged}}<li><a href="/edit.html?id={{.ID}}">Edit</a></li>{{end}}
-          {{if .AdminLogged}}<li><a href="/delete?id={{.ID}}">Delete</a></li>{{end}}
-        </ul>
     </article>
 
     <hr>
