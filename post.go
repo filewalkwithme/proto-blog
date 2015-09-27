@@ -103,9 +103,9 @@ func (b *blog) editPostHandler(response http.ResponseWriter, request *http.Reque
 	}
 
 	var id = -1
-	var title = "Title"
-	var content string
-	var shortDescription = "Short Description"
+	var title = "New Post Title"
+	var content = "Hello, world!"
+	var shortDescription = "Give a Short Description"
 	var date = time.Now()
 
 	v := request.URL.Query()

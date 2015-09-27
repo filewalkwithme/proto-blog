@@ -150,42 +150,42 @@ var editor = `
 
     <input type="text" name="short_description" id="input_short_description" value="{{.ShortDescription}}" placeholder="Short Decription" style="width:100%; margin-bottom:5px"/>
     <div style="margin-bottom:5px">
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_bold" type="button" class="btn btn-default" aria-label="Left Align" title="Bold">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_bold" type="button" class="btn btn-default" aria-label="Bold" title="Bold">
         <span class="fa fa-bold fa-fw" aria-hidden="true"/>
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_italic" type="button" class="btn btn-default" aria-label="Left Align" title="Italic">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_italic" type="button" class="btn btn-default" aria-label="Italic" title="Italic">
         <span class="fa fa-italic fa-fw" aria-hidden="true"/>
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_H1" type="button" class="btn btn-default" aria-label="Left Align" title="Header 1">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_H1" type="button" class="btn btn-default" aria-label="Header 1" title="Header 1">
         <span class="fa fa-header fa-fw" aria-hidden="true"/>1
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_H2" type="button" class="btn btn-default" aria-label="Left Align" title="Header 2">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_H2" type="button" class="btn btn-default" aria-label="Header 2" title="Header 2">
         <span class="fa fa-header fa-fw" aria-hidden="true"/>2
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_H3" type="button" class="btn btn-default" aria-label="Left Align" title="Header 3">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_H3" type="button" class="btn btn-default" aria-label="Header 3" title="Header 3">
         <span class="fa fa-header fa-fw" aria-hidden="true"/>3
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_image" type="button" class="btn btn-default" aria-label="Left Align" title="Image">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_image" type="button" class="btn btn-default" aria-label="Image" title="Image">
         <span class="fa fa-photo fa-fw" aria-hidden="true"/>
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_hyperlink" type="button" class="btn btn-default" aria-label="Left Align" title="Hyperlink">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_hyperlink" type="button" class="btn btn-default" aria-label="Hyperlink" title="Hyperlink">
         <span class="fa fa-link fa-fw" aria-hidden="true"/>
       </button>
 
 
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_quote" type="button" class="btn btn-default" aria-label="Left Align" title="Quote">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_quote" type="button" class="btn btn-default" aria-label="Quote" title="Quote">
         <span class="fa fa-quote-left fa-fw" aria-hidden="true"/>
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_list" type="button" class="btn btn-default" aria-label="Left Align" title="List">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_list" type="button" class="btn btn-default" aria-label="List" title="List">
         <span class="fa fa-list-ul fa-fw" aria-hidden="true"/>
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_orderedlist" type="button" class="btn btn-default" aria-label="Left Align" title="Ordered List">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_orderedlist" type="button" class="btn btn-default" aria-label="Ordered List" title="Ordered List">
         <span class="fa fa-list-ol fa-fw" aria-hidden="true"/>
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_code" type="button" class="btn btn-default" aria-label="Left Align" title="Code">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_code" type="button" class="btn btn-default" aria-label="Code" title="Code">
         <span class="fa fa-code fa-fw" aria-hidden="true"/>
       </button>
-      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_linebreak" type="button" class="btn btn-default" aria-label="Left Align" title="Horizontal Line">
+      <button style="padding-bottom: 6px;padding-left: 12px;padding-right: 12px;padding-top: 6px;" id="btnMD_linebreak" type="button" class="btn btn-default" aria-label="Horizontal Line" title="Horizontal Line">
         <span class="fa fa-ellipsis-h fa-fw" aria-hidden="true"/>
       </button>
 
