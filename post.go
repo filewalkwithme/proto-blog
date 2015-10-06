@@ -25,6 +25,8 @@ type postPage struct {
 }
 
 func (b *blog) viewPostHandler(response http.ResponseWriter, request *http.Request) {
+	log.Printf("%v\n", request)
+
 	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -89,6 +91,8 @@ func (b *blog) viewPostHandler(response http.ResponseWriter, request *http.Reque
 }
 
 func (b *blog) editPostHandler(response http.ResponseWriter, request *http.Request) {
+	log.Printf("%v\n", request)
+
 	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -156,6 +160,8 @@ func (b *blog) editPostHandler(response http.ResponseWriter, request *http.Reque
 }
 
 func (b *blog) savePostHandler(response http.ResponseWriter, request *http.Request) {
+	log.Printf("%v\n", request)
+
 	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
@@ -246,6 +252,8 @@ func (b *blog) savePostHandler(response http.ResponseWriter, request *http.Reque
 }
 
 func (b *blog) deletePostHandler(response http.ResponseWriter, request *http.Request) {
+	log.Printf("%v\n", request)
+
 	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)

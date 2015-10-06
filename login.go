@@ -21,6 +21,8 @@ var failedAttempts = 0
 var lastValidAttempt time.Time
 
 func (b *blog) loginHandler(response http.ResponseWriter, request *http.Request) {
+	log.Printf("%v\n", request)
+
 	if failedAttempts >= 5 && time.Since(lastValidAttempt) >= (30*time.Minute) {
 		failedAttempts = 0
 	}
@@ -88,6 +90,8 @@ func (b *blog) loginHandler(response http.ResponseWriter, request *http.Request)
 
 // login page
 func (b *blog) loginPageHandler(response http.ResponseWriter, request *http.Request) {
+	log.Printf("%v\n", request)
+
 	session, err := b.store.Get(request, b.sessionName)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)

@@ -32,6 +32,8 @@ type postEntry struct {
 func (b *blog) indexPageHandler(response http.ResponseWriter, request *http.Request) {
 	var posts []postEntry
 
+	log.Printf("%v\n", request)
+
 	session, err := b.store.Get(request, b.sessionName)
 
 	if err == nil {
