@@ -1,6 +1,6 @@
 # proto-blog
 
-## What is
+## What is it?
 Proto-blog is an experimental blog-engine which let you write posts using the markdown format.
 
 ![proto-blog-screenshot-00.png](https://github.com/maiconio/proto-blog/blob/master/screenshots/proto-blog-screenshot-00.png)
@@ -12,7 +12,7 @@ go build -o proto-blog
 ```
 
 ## Config
-Just edit the file blog.cfg
+Edit the file `blog.cfg`
 ```
 [blog]
 title = The Bootstrap Blog
@@ -34,15 +34,17 @@ email = your@email.com
 ```
 export blog_password_<username>=<password>
 ./proto-blog
+```
 
 i.e.:
+```
 export blog_password_johndoe=123456
 ./proto-blog
 ```
 
 ## Posting
 
-First, you'll need login, just access `/admin` and enter the username and password given in the previous step. After that, go back to home and click in `new post`
+You'll need to login accessing `/admin` and entering your username and password. After that, go back to home and click in `new post`
 
 ## More images!
 ![proto-blog-screenshot-01.png](https://github.com/maiconio/proto-blog/blob/master/screenshots/proto-blog-screenshot-01.png)
