@@ -32,8 +32,17 @@ email = your@email.com
 
 ## Running
 ```
+export blog_password_<username>=<password>
+./proto-blog
+
+i.e.:
+export blog_password_johndoe=123456
 ./proto-blog
 ```
+
+## Posting
+
+First, you'll need login, just access `/admin` and enter the username and password given in the previous step. After that, go back to home and click in `new post`
 
 ## More images!
 ![proto-blog-screenshot-01.png](https://github.com/maiconio/proto-blog/blob/master/screenshots/proto-blog-screenshot-01.png)
